@@ -1,63 +1,39 @@
 <?php
-
 namespace App\Http\Controllers\Guru;
 
-use Illuminate\Routing\Controller;
-
-use App\Models\Jadwal;
+use App\Http\Controllers\Controller;
+use App\Models\Siswa;
+use App\Models\Mapel;
 use App\Models\Kelas;
-use App\Models\Nilai;
-use Illuminate\Http\Request;
+use App\Models\Berita;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-    /**
-     * Show the guru dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function index(): View
     {
-        $user = Auth::user();
+        $guru = Auth::user()->guru;
+        $name = Auth::user()->name;
 
-        // Get classes where the teacher is a homeroom teacher
-        $kelasWali = Kelas::where('wali_kelas_id', $user->id)->get();
+        $totalSiswa = 0;
+        $totalMapel = 0;
+        if ($guru) {
+            // Total mapel yang dia ajar
+            $totalMapel = $guru->mapel()->count();
 
-        // Get teacher's schedule for today
-        $jadwalHariIni = Jadwal::where('guru_id', $user->guru->id)
-            ->where('hari', strtolower(date('l')))
-            ->orderBy('jam_mulai')
-            ->get();
+            // Total siswa di semua kelas yang dia ampu
+            $kelasIds = $guru->kelas()->pluck('id');
+            $totalSiswa = Siswa::whereIn('kelas_id', $kelasIds)->count();
+        }
 
-        // Get recent grades given by the teacher
-        $nilaiTerbaru = Nilai::where('guru_id', $user->guru->id)
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
+        // Berita terbaru yang ditujukan untuk guru
+        $recentBerita = Berita::where('status', 'Published') // misal ada kolom audience untuk target berita
+                            ->latest()
+                            ->take(5)
+                            ->get();
 
-        // Count total classes taught by the teacher
-        $totalKelas = Jadwal::where('guru_id', $user->guru->id)
-            ->distinct('kelas_id')
-            ->count('kelas_id');
-
-        // Count total subjects taught by the teacher
-        $totalMapel = Jadwal::where('guru_id', $user->guru->id)
-            ->distinct('mapel_id')
-            ->count('mapel_id');
-
-        return view('guru.dashboard', compact(
-            'kelasWali',
-            'jadwalHariIni',
-            'nilaiTerbaru',
-            'totalKelas',
-            'totalMapel'
-        ));
+        return view('guru.dashboard', compact('name', 'totalSiswa', 'totalMapel', 'recentBerita', 'guru'));
     }
 }

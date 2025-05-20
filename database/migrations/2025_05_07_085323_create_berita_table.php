@@ -14,7 +14,7 @@ return new class extends Migration
             $table->text('konten');
             $table->string('kategori');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Penulis
-            $table->string('status')->default('Dipublikasikan');
+            $table->string('status')->default('Unpublish');
             $table->timestamps();
         });
     }

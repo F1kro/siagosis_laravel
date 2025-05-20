@@ -2,163 +2,122 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Routing\Controller;
+use App\Models\Kelas;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class MapelController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('role:admin');
-    }
-
-    /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $query = Mapel::query();
 
-        // Search functionality
         if ($request->has('search') && !empty($request->search)) {
-            $query->where(function($q) use ($request) {
-                $q->where('kode', 'like', '%' . $request->search . '%')
-                  ->orWhere('nama', 'like', '%' . $request->search . '%');
-            });
+            $query->where('nama', 'like', '%' . $request->search . '%')
+                ->orWhere('kode', 'like', '%' . $request->search . '%');
         }
 
         $mapel = $query->paginate(10);
+        $name = Auth::user()->name;
 
-        return view('admin.mapel.index', compact('mapel'));
+
+        return view('admin.mapel.index', compact('mapel','name'));
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('admin.mapel.create');
+        $kelas = Kelas::all();
+
+        return view('admin.mapel.create', compact('kelas'));
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|string|max:10|unique:mapel',
-            'nama' => 'required|string|max:100',
-            'kelompok' => 'required|string|max:50',
-            'tingkat' => 'required|string|max:50',
-            'kkm' => 'required|integer|min:0|max:100',
-            'deskripsi' => 'nullable|string',
+            'kode' => 'required|string|max:50|unique:mapel,kode',
+            'nama' => 'required|string|max:225',
+            'kkm' => 'required|numeric',
+            'jumlah_jam' => 'required|numeric',
+            'kelas_id' => 'array|exists:kelas,id',
         ]);
 
-        Mapel::create([
+        $mapel = Mapel::create([
             'kode' => $request->kode,
             'nama' => $request->nama,
-            'kelompok' => $request->kelompok,
-            'tingkat' => $request->tingkat,
             'kkm' => $request->kkm,
-            'deskripsi' => $request->deskripsi,
+            'jumlah_jam' => $request->jumlah_jam,
         ]);
 
-        return redirect()->route('admin.mapel.index')
-            ->with('success', 'Mata pelajaran berhasil ditambahkan.');
-    }
+        $mapel->kelas()->sync($request->kelas_id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $mapel = Mapel::findOrFail($id);
-
-        return view('admin.mapel.show', compact('mapel'));
+        return redirect()->route('admin.mapel.index')->with('success', 'Data mapel berhasil ditambahkan.');
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $mapel = Mapel::findOrFail($id);
+        $mapel = Mapel::with('kelas')->findOrFail($id);
+        $kelas = Kelas::all();
 
-        return view('admin.mapel.edit', compact('mapel'));
+        return view('admin.mapel.edit', compact('mapel', 'kelas'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $mapel = Mapel::findOrFail($id);
 
         $request->validate([
-            'kode' => 'required|string|max:10|unique:mapel,kode,' . $id,
-            'nama' => 'required|string|max:100',
-            'kelompok' => 'required|string|max:50',
-            'tingkat' => 'required|string|max:50',
-            'kkm' => 'required|integer|min:0|max:100',
-            'deskripsi' => 'nullable|string',
+            'kode' => 'required|string|max:50|unique:mapel,kode,' . $mapel->id,
+            'nama' => 'required|string|max:225',
+            'kkm' => 'required|numeric',
+            'jumlah_jam' => 'required|numeric',
+            'kelas_id' => 'array|exists:kelas,id',
         ]);
 
         $mapel->update([
             'kode' => $request->kode,
             'nama' => $request->nama,
-            'kelompok' => $request->kelompok,
-            'tingkat' => $request->tingkat,
             'kkm' => $request->kkm,
-            'deskripsi' => $request->deskripsi,
+            'jumlah_jam' => $request->jumlah_jam,
         ]);
 
-        return redirect()->route('admin.mapel.index')
-            ->with('success', 'Mata pelajaran berhasil diperbarui.');
+        if ($request->filled('kelas_id')) {
+            $mapel->kelas()->sync($request->kelas_id);
+        } else {
+            $mapel->kelas()->detach();
+        }
+
+        return redirect()->route('admin.mapel.index')->with('success', 'Data mapel berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $mapel = Mapel::findOrFail($id);
 
-        // Check if there are related records
-        if ($mapel->jadwal()->count() > 0 || $mapel->nilai()->count() > 0) {
-            return redirect()->route('admin.mapel.index')
-                ->with('error', 'Mata pelajaran tidak dapat dihapus karena masih memiliki data terkait.');
-        }
+        // Lepas relasi kelas dulu
+        $mapel->kelas()->detach();
 
         $mapel->delete();
 
-        return redirect()->route('admin.mapel.index')
-            ->with('success', 'Mata pelajaran berhasil dihapus.');
+        return redirect()->route('admin.mapel.index')->with('success', 'Data mapel berhasil dihapus.');
     }
 }

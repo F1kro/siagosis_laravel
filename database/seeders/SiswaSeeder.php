@@ -2,33 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Siswa;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
+use App\Models\Siswa;
 
 class SiswaSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $faker = Faker::create();
-
-        // Ambil semua user yang role-nya 'siswa'
-        $siswaUsers = User::where('role', 'siswa')->get();
-
-        foreach ($siswaUsers as $user) {
-            Siswa::create([
-                'user_id' => $user->id,
-                'nama' => $faker->name,
-                'nisn' => $faker->numerify('############'),
-                'jenis_kelamin' => $faker->randomElement(['Laki-laki', 'Perempuan']),
-                'tempat_lahir' => $faker->city,
-                'tanggal_lahir' => $faker->date(),
-                'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha']),
-                'alamat' => $faker->address,
-                'kelas_id' => 1, // Pastikan kelas ID ini valid
-                'foto' => null, // Bisa dikosongkan, sesuaikan dengan kebutuhan
-            ]);
-        }
+        // Buat 20 siswa menggunakan factory
+        Siswa::factory()->count(20)->create();
     }
 }

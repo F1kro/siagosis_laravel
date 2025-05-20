@@ -17,6 +17,7 @@ class Berita extends Model
         'kategori',
         'user_id',
         'status',
+        'foto',
     ];
 
     public function user()

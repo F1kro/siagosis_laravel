@@ -2,25 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Kelas;
 use Illuminate\Database\Seeder;
+use App\Models\Kelas;
 
 class KelasSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        Kelas::create([
-            'kode_kelas' => 'K001',
-            'nama_kelas' => 'X-A',
-            'guru_id' => 1, // Budi Santoso
-            'tahun_ajaran' => '2023/2024',
-        ]);
-
-        Kelas::create([
-            'kode_kelas' => 'K002',
-            'nama_kelas' => 'X-B',
-            'guru_id' => 1, // Siti Rahayu
-            'tahun_ajaran' => '2023/2024',
-        ]);
+        // Buat 5 kelas secara acak menggunakan factory
+        Kelas::factory()->count(5)->create();
     }
 }

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             GuruMapelSeeder::class,
             JadwalSeeder::class,
             BeritaSeeder::class,
+            KelasMapelSeeder::class,
         ]);
     }
 }

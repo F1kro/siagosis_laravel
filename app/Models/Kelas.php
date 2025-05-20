@@ -42,4 +42,17 @@ class Kelas extends Model
     {
         return $this->hasMany(GuruMapel::class);
     }
+
+    public function mapel()
+    {
+        return $this->belongsToMany(Mapel::class, 'kelas_mapel')
+            ->withPivot('tahun_ajaran')
+            ->withTimestamps();
+    }
+
+    public function waliKelas()
+    {
+        return $this->belongsTo(Guru::class, 'guru_id'); 
+    }
+
 }

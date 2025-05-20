@@ -20,10 +20,10 @@ class DashboardController extends Controller
         $totalSiswa = Siswa::count();
         $totalKelas = Kelas::count();
         $totalMapel = Mapel::count();
-        $recentBerita = Berita::latest()->take(5)->get();
+        $recentBerita = Berita::latest()->take(5)->where('status', 'Published')->get();
 
         return view('admin.dashboard', compact('totalGuru', 'totalSiswa', 'totalKelas', 'totalMapel', 'recentBerita', 'name'));
     }
 
-    
+
 }

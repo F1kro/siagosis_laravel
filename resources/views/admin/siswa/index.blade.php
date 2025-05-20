@@ -73,10 +73,10 @@
                                      {{ $siswa->firstItem() + $index }}
                                  </td>
                                  <td class="px-4 py-3 text-sm">
-                                     {{ $s->siswa->nama }}
+                                     {{ $s->siswa->nama ?? '-' }}
                                  </td>
                                  <td class="px-4 py-3 text-sm">
-                                     {{ $s->siswa->nisn }}
+                                     {{ $s->siswa->nisn ?? '-' }}
                                  </td>
                                  <td class="px-4 py-3 text-sm">
                                      {{ $s->siswa && $s->siswa->kelas ? $s->siswa->kelas->nama_kelas : '-' }}
@@ -101,7 +101,7 @@
                                              class="text-yellow-500 hover:text-yellow-700">
                                              <i class="fas fa-edit"></i>
                                          </a>
-                                         <button onclick="confirmDelete({{ $s->id }}, '{{ $s->siswa->nama }}')"
+                                         <button onclick="confirmDelete({{ $s->id }}, '{{ $s->siswa->nama ?? '-'}}')"
                                              class="text-red-600 hover:text-red-800">
                                              <i class="fas fa-trash"></i>
                                          </button>
@@ -124,9 +124,18 @@
                      </tbody>
                  </table>
              </div>
-         <div class="py-4">
-             {{ $siswa->links('pagination::tailwind') }}
-         </div>
+             <div class="flex flex-col items-center justify-between py-4 md:flex-row">
+                {{-- Pagination links --}}
+                <div>
+                    {{ $siswa->links('pagination::tailwind') }}
+                </div>
+
+                {{-- Page info --}}
+                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 md:mt-0">
+                    Halaman {{ $siswa->currentPage() }} dari {{ $siswa->lastPage() }} |
+                    Menampilkan {{ $siswa->firstItem() }} - {{ $siswa->lastItem() }} dari total {{ $siswa->total() }} data
+                </div>
+            </div>
      </div>
 
      {{-- Modal Hapus Siswa --}}

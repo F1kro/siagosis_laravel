@@ -14,13 +14,6 @@ use Illuminate\Support\Facades\Auth;
 class SiswaController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

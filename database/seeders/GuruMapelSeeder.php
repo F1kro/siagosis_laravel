@@ -7,16 +7,9 @@ use Illuminate\Database\Seeder;
 
 class GuruMapelSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Budi Santoso mengajar Matematika di kelas X-A
-        GuruMapel::create([
-            'guru_id' => 1,
-            'mapel_id' => 1,
-            'kelas_id' => 1,
-            'tahun_ajaran' => '2023/2024',
-        ]);
-
-      
+        // Generate 15 relasi guru-mapel secara acak
+        GuruMapel::factory()->count(15)->create();
     }
 }

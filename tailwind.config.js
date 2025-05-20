@@ -22,6 +22,7 @@ export default {
               flexGrow: {
                 '5' : '5'
               }
+
         },
     },
 

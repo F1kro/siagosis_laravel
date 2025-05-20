@@ -9,19 +9,7 @@ class JadwalSeeder extends Seeder
 {
     public function run()
     {
-        // Jadwal Matematika kelas X-A (Senin)
-        Jadwal::create([
-            'kelas_id' => 1,
-            'mapel_id' => 1,
-            'guru_id' => 1,
-            'hari' => 'Senin',
-            'jam_mulai' => '07:00:00',
-            'jam_selesai' => '08:30:00',
-            'ruangan' => 'Ruang 101',
-            'tahun_ajaran' => '2023/2024',
-            'semester' => 'Ganjil',
-        ]);
-
-       
+        // Generate 15 jadwal acak
+        Jadwal::factory()->count(15)->create();
     }
 }

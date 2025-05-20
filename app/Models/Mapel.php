@@ -14,7 +14,7 @@ class Mapel extends Model
     protected $fillable = [
         'kode',
         'nama',
-        'kelas',
+        'kelas',   
         'kkm',
         'jumlah_jam',
     ];
@@ -40,4 +40,11 @@ class Mapel extends Model
     {
         return $this->hasMany(TodoList::class);
     }
+
+    public function kelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'kelas_mapel')
+            ->withTimestamps();
+    }
+
 }

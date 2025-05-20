@@ -50,4 +50,9 @@ class Guru extends Model
     {
         return $this->hasMany(Nilai::class);
     }
+
+    public function guruMapel()
+{
+    return $this->hasMany(GuruMapel::class);
+}
 }

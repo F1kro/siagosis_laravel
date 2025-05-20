@@ -1,64 +1,41 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\GuruController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Admin\SiswaController;
-use App\Http\Controllers\Admin\KelasController;
-use App\Http\Controllers\Admin\MapelController;
-use App\Http\Controllers\Admin\JadwalController;
-use App\Http\Controllers\Admin\NilaiController;
 use App\Http\Controllers\Admin\AbsensiController;
 use App\Http\Controllers\Admin\BeritaController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\GuruController;
+use App\Http\Controllers\Admin\GuruMapelController as AdminGuruMapelController;
+use App\Http\Controllers\Admin\JadwalController;
+use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\MapelController;
+use App\Http\Controllers\Admin\NilaiController;
 use App\Http\Controllers\Admin\OrtuController;
-// use App\Http\Controllers\Admin\;
-use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
-use App\Http\Controllers\Guru\JadwalController as GuruJadwalController;
-use App\Http\Controllers\Guru\KelasController as GuruKelasController;
-use App\Http\Controllers\Guru\MapelController as GuruMapelController;
-use App\Http\Controllers\Guru\NilaiController as GuruNilaiController;
+use App\Http\Controllers\Admin\SiswaController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Guru\AbsensiController as GuruAbsensiController;
+use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
+use App\Http\Controllers\Guru\NilaiController as GuruNilaiController;
+use App\Http\Controllers\Orangtua\AnakController;
+use App\Http\Controllers\Orangtua\DashboardController as OrangtuaDashboardController;
+use App\Http\Controllers\Orangtua\NilaiController as OrangtuaNilaiController;
+use App\Http\Controllers\Siswa\BeritaController as SiswaBeritaController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\JadwalController as SiswaJadwalController;
 use App\Http\Controllers\Siswa\MapelController as SiswaMapelController;
 use App\Http\Controllers\Siswa\NilaiController as SiswaNilaiController;
-use App\Http\Controllers\Siswa\BeritaController as SiswaBeritaController;
-use App\Http\Controllers\Orangtua\DashboardController as OrangtuaDashboardController;
-use App\Http\Controllers\Orangtua\AnakController;
-use App\Http\Controllers\Orangtua\NilaiController as OrangtuaNilaiController;
-use App\Http\Controllers\Orangtua\AbsensiController as OrangtuaAbsensiController;
-use App\Http\Controllers\Orangtua\BeritaController as OrangtuaBeritaController;
-use App\Http\Controllers\Admin\UsersController; // Ensure this class exists in the specified namespace
-use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\EnsureUserHasRole;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-// Auth routes (menggunakan Laravel Breeze/Fortify)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    return view('landing_page');
 });
 
 // Redirect berdasarkan role setelah login
 
-
 // Admin Routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', EnsureUserHasRole::class.':admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -120,38 +97,20 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Nilai Management
     Route::resource('nilai', NilaiController::class)->names([
         'index' => 'nilai.index',
-        'create' => 'nilai.create',
-        'store' => 'nilai.store',
-        'show' => 'nilai.show',
-        'edit' => 'nilai.edit',
-        'update' => 'nilai.update',
-        'destroy' => 'nilai.destroy',
-    ]);;
-
-    // Absensi Management
-    Route::resource('absensi', AbsensiController::class)->names([
-        'index' => 'absensi.index',
-        'create' => 'absensi.create',
-        'store' => 'absensi.store',
-        'show' => 'absensi.show',
-        'edit' => 'absensi.edit',
-        'update' => 'absensi.update',
-        'destroy' => 'absensi.destroy',
-    ]);;
+    ])->except(['create', 'store', 'show', 'edit', 'update', 'destroy']);
 
     // Berita Management
     Route::resource('berita', BeritaController::class)->names([
         'index' => 'berita.index',
         'create' => 'berita.create',
         'store' => 'berita.store',
-        'show' => 'berita.show',
         'edit' => 'berita.edit',
         'update' => 'berita.update',
         'destroy' => 'berita.destroy',
-    ]);;
+    ])->except('show');
 
     // Guru-Mapel Management
-    Route::resource('guru-mapel', GuruMapelController::class)->names([
+    Route::resource('guru-mapel', AdminGuruMapelController::class)->names([
         'index' => 'guru-mapel.index',
         'create' => 'guru-mapel.create',
         'store' => 'guru-mapel.store',
@@ -161,27 +120,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         'destroy' => 'guru-mapel.destroy',
     ]);
 
-    // Nilai Management
-    Route::resource('nilai', NilaiController::class)->names([
-        'index' => 'nilai.index',
-        'create' => 'nilai.create',
-        'store' => 'nilai.store',
-        'show' => 'nilai.show',
-        'edit' => 'nilai.edit',
-        'update' => 'nilai.update',
-        'destroy' => 'nilai.destroy',
-    ]);
-
-    // Absensi Management
     Route::resource('absensi', AbsensiController::class)->names([
         'index' => 'absensi.index',
-        'create' => 'absensi.create',
-        'store' => 'absensi.store',
-        'show' => 'absensi.show',
-        'edit' => 'absensi.edit',
-        'update' => 'absensi.update',
-        'destroy' => 'absensi.destroy',
-    ]);
+    ])->except(['create', 'store', 'show', 'edit', 'update', 'destroy']);
 
     Route::resource('ortu', OrtuController::class)->names([
         'index' => 'ortu.index',
@@ -193,22 +134,35 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         'destroy' => 'ortu.destroy',
     ]);
 
+    Route::resource('users', UsersController::class)->names([
+        'index' => 'users.index',
+        'create' => 'users.create',
+        'store' => 'users.store',
+        'show' => 'users.show',
+        'edit' => 'users.edit',
+        'update' => 'users.update',
+        'destroy' => 'users.destroy',
+    ]);
+
+    Route::patch('berita/{id}/accept', [BeritaController::class, 'accept'])->name('berita.accept');
+
+    Route::get('/berita/{id}', [BeritaController::class, 'showdetail'])->name('berita.showdetail');
+
+    Route::get('nilai/laporan', [NilaiController::class, 'laporan'])->name('nilai.laporan');
+
+    Route::get('absensi/laporan', [AbsensiController::class, 'laporan'])->name('absensi.laporan');
+
+    Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('berita.upload');
+
 });
 
-
 // Guru Routes
-Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
+Route::middleware(['auth', EnsureUserHasRole::class.':guru'])->prefix('guru')->name('guru.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard');
 
-    // Jadwal
-    // Route::resource('jadwal', GuruJadwalController::class);
-
-    // // Kelas
-    // Route::resource('kelas', GuruKelasController::class);
-
     // Mapel
-    Route::resource('mapel', GuruMapelController::class);
+    // Route::resource('mapel', GuruMapelController::class);
 
     // Nilai
     Route::resource('nilai', GuruNilaiController::class);
@@ -222,8 +176,9 @@ Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
 
 });
 
+
 // Siswa Routes
-Route::middleware(['auth'])->prefix('siswa')->name('siswa.')->group(function () {
+Route::middleware(['auth', EnsureUserHasRole::class.':siswa'])->prefix('siswa')->name('siswa.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('dashboard');
 
@@ -240,12 +195,10 @@ Route::middleware(['auth'])->prefix('siswa')->name('siswa.')->group(function () 
     Route::get('berita', [SiswaBeritaController::class, 'index'])->name('berita.index');
     Route::get('berita/{berita}', [SiswaBeritaController::class, 'show'])->name('berita.show');
 
-
-
 });
 
 // Orangtua Routes
-Route::middleware(['auth'])->prefix('orangtua')->name('orangtua.')->group(function () {
+Route::middleware(['auth', EnsureUserHasRole::class.':orangtua'])->prefix('orangtua')->name('orangtua.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [OrangtuaDashboardController::class, 'index'])->name('dashboard');
 
@@ -268,4 +221,4 @@ Route::middleware(['auth'])->prefix('orangtua')->name('orangtua.')->group(functi
 route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Require auth routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

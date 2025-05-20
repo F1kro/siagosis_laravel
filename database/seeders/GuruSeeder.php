@@ -19,5 +19,9 @@ class GuruSeeder extends Seeder
             'pendidikan_terakhir' => 'S2 Pendidikan',
             'alamat' => 'Jl. Guru Hebat',
         ]);
+
+        Guru::factory()->count(10)->create();
+
     }
+
 }

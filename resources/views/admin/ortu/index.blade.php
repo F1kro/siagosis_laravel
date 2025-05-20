@@ -98,9 +98,18 @@
                     </tbody>
                 </table>
             </div>
-        <div class="py-4">
-            {{ $orangtua->links('pagination::tailwind') }}
-        </div>
+            <div class="flex flex-col items-center justify-between py-4 md:flex-row">
+                {{-- Pagination links --}}
+                <div>
+                    {{ $orangtua->links('pagination::tailwind') }}
+                </div>
+
+                {{-- Page info --}}
+                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 md:mt-0">
+                    Halaman {{ $orangtua->currentPage() }} dari {{ $orangtua->lastPage() }} |
+                    Menampilkan {{ $orangtua->firstItem() }} - {{ $orangtua->lastItem() }} dari total {{ $orangtua->total() }} data
+                </div>
+            </div>
     </div>
 
     {{-- Modal Hapus guru --}}

@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         if (Auth::check()) {
             $user = User::with('role')->find(Auth::id());
-
+            
             if ($user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->isGuru()) {
@@ -27,6 +27,6 @@ class HomeController extends Controller
             }
         }
 
-        return view('welcome');
+        return view('landing_page');
     }
 }

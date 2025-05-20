@@ -107,9 +107,18 @@
                     </tbody>
                 </table>
             </div>
-        <div class="py-4">
-            {{ $guru->links('pagination::tailwind') }}
-        </div>
+            <div class="flex flex-col items-center justify-between py-4 md:flex-row">
+                {{-- Pagination links --}}
+                <div>
+                    {{ $guru->links('pagination::tailwind') }}
+                </div>
+
+                {{-- Page info --}}
+                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 md:mt-0">
+                    Halaman {{ $guru->currentPage() }} dari {{ $guru->lastPage() }} |
+                    Menampilkan {{ $guru->firstItem() }} - {{ $guru->lastItem() }} dari total {{ $guru->total() }} data
+                </div>
+            </div>
     </div>
 
     {{-- Modal Hapus guru --}}
