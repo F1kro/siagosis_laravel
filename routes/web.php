@@ -158,21 +158,31 @@ Route::middleware(['auth', EnsureUserHasRole::class.':admin'])->prefix('admin')-
 
 // Guru Routes
 Route::middleware(['auth', EnsureUserHasRole::class.':guru'])->prefix('guru')->name('guru.')->group(function () {
-    // Dashboard
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard');
 
-    // Mapel
-    // Route::resource('mapel', GuruMapelController::class);
+    Route::resource('nilai', GuruNilaiController::class)->names([
+        'index' => 'nilai.index',
+        'create' => 'nilai.create',
+        'update' => 'nilai.update',
+        'store' => 'nilai.store',
+        'edit' => 'nilai.edit',
+        'destroy' => 'nilai.destroy',
+    ])->except('show');
 
-    // Nilai
-    Route::resource('nilai', GuruNilaiController::class);
+    Route::prefix('absensi')->name('absensi.')->group(function () {
+        Route::get('/', [GuruAbsensiController::class, 'dashboard'])->name('dashboard');
+        Route::get('/daftar-kehadiran', [GuruAbsensiController::class, 'index'])->name('index');
+        Route::get('/input', [GuruAbsensiController::class, 'inputAbsensi'])->name('inputAbsensi');
+        Route::post('/', [GuruAbsensiController::class, 'store'])->name('store');
+        Route::delete('/hapus-massal', [GuruAbsensiController::class, 'destroy'])->name('destroy');
+    });
 
-    // Absensi
-    Route::resource('absensi', GuruAbsensiController::class);
+    Route::get('nilai/dashboard', [GuruNilaiController::class, 'dashboard'])->name('nilai.dashboard');
 
-    // Berita
-    // Route::get('berita', [GuruBeritaController::class, 'index'])->name('berita.index');
-    // Route::get('berita/{berita}', [GuruBeritaController::class, 'show'])->name('berita.show');
+    Route::get('absensi/dashboard', [GuruAbsensiController::class, 'dashboard'])->name('absensi.dashboard');
+
+    Route::get('absensi/inputAbsensi', [GuruAbsensiController::class, 'inputAbsensi'])->name('absensi.inputAbsensi');
+
 
 });
 

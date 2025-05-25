@@ -14,7 +14,7 @@ class Mapel extends Model
     protected $fillable = [
         'kode',
         'nama',
-        'kelas',   
+        'kelas',
         'kkm',
         'jumlah_jam',
     ];
@@ -22,7 +22,7 @@ class Mapel extends Model
     public function guru()
     {
         return $this->belongsToMany(Guru::class, 'guru_mapel')
-            ->withPivot('kelas_id', 'tahun_ajaran')
+            // ->withPivot('kelas_id', 'tahun_ajaran')
             ->withTimestamps();
     }
 
@@ -43,7 +43,7 @@ class Mapel extends Model
 
     public function kelas()
     {
-        return $this->belongsToMany(Kelas::class, 'kelas_mapel')
+        return $this->belongsToMany(Kelas::class, 'kelas_mapel', 'mapel_id', 'kelas_id')
             ->withTimestamps();
     }
 

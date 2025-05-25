@@ -1,135 +1,203 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="h4 font-weight-bold">
-                {{ __('Data Kehadiran') }}
-            </h2>
-            <a href="{{ route('guru.kehadiran.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i> Input Kehadiran
-            </a>
+@extends('layouts.app')
+
+@section('title', 'Data Kehadiran Kelas ' . ($selectedKelas->nama_kelas ?? ''))
+
+@section('content')
+    <div class="w-full overflow-hidden rounded-lg">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
+            Selamat Datang🎓, {{ Auth::user()->name ?? 'Guru' }}
+        </h2>
+
+        <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                <a href="{{ route('guru.dashboard') }}" class="hover:underline">Dashboard</a>
+                <span class="mx-2">/</span>
+                <a href="{{ route('guru.absensi.dashboard') }}" class="hover:underline">Pilih Kelas Absensi</a>
+                <span class="mx-2">/</span>
+                Data Kehadiran Kelas {{ $selectedKelas->nama_kelas ?? 'Tidak Diketahui' }}
+            </p>
         </div>
-    </x-slot>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="mb-3 row">
-                <div class="col-md-12">
-                    <form action="{{ route('guru.kehadiran.index') }}" method="GET">
-                        <div class="row">
-                            <div class="mb-2 col-md-4">
-                                <select name="kelas_id" class="form-select">
-                                    <option value="">Semua Kelas</option>
-                                    @foreach($kelas as $k)
-                                        <option value="{{ $k->id }}" {{ request('kelas_id') == $k->id ? 'selected' : '' }}>
-                                            {{ $k->nama_kelas }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-2 col-md-3">
-                                <select name="status" class="form-select">
-                                    <option value="">Semua Status</option>
-                                    <option value="hadir" {{ request('status') == 'hadir' ? 'selected' : '' }}>Hadir</option>
-                                    <option value="izin" {{ request('status') == 'izin' ? 'selected' : '' }}>Izin</option>
-                                    <option value="sakit" {{ request('status') == 'sakit' ? 'selected' : '' }}>Sakit</option>
-                                    <option value="alpa" {{ request('status') == 'alpa' ? 'selected' : '' }}>Alpa</option>
-                                </select>
-                            </div>
-                            <div class="mb-2 col-md-3">
-                                <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" placeholder="Pilih Tanggal">
-                            </div>
-                            <div class="mb-2 col-md-2">
-                                <div class="d-flex">
-                                    <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                    @if(request('kelas_id') || request('status') || request('tanggal'))
-                                        <a href="{{ route('guru.kehadiran.index') }}" class="btn btn-secondary">Reset</a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        {{-- BARIS PERTAMA: SEMUA FILTER --}}
+        <div class="flex flex-col items-start gap-4 mb-4 md:flex-row md:items-center">
+            <form action="{{ route('guru.absensi.index', ['kelas_id' => $selectedKelas->id]) }}" method="GET"
+                  class="flex flex-wrap items-center w-full gap-2"> {{-- <-- CUKUP DENGAN gap-2 DI SINI --}}
+                <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
 
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Tanggal</th>
-                            <th>Siswa</th>
-                            <th>Kelas</th>
-                            <th>Status</th>
-                            <th>Keterangan</th>
-                            <th>Aksi</th>
+                {{-- Setiap elemen di sini akan memiliki jarak otomatis karena 'gap-2' --}}
+                <select name="mapel_id" class="px-3 py-3 text-sm border rounded-md dark:border-none">
+                    <option value="">Semua Mapel</option>
+                    @foreach($mapelOptions as $mapel)
+                        <option value="{{ $mapel->id }}" {{ request('mapel_id') == $mapel->id ? 'selected' : '' }}>{{ $mapel->nama }}</option>
+                    @endforeach
+                </select>
+
+                <select name="status" class="px-3 py-3 text-sm border rounded-md dark:border-none">
+                    <option value="">Semua Status</option>
+                    <option value="Hadir" {{ request('status') == 'Hadir' ? 'selected' : '' }}>Hadir</option>
+                    <option value="Izin" {{ request('status') == 'Izin' ? 'selected' : '' }}>Izin</option>
+                    <option value="Sakit" {{ request('status') == 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                    <option value="Alpa" {{ request('status') == 'Alpa' ? 'selected' : '' }}>Alpa</option>
+                </select>
+
+                <input type="date" name="tanggal" class="px-3 py-3 text-sm border rounded-md dark:border-none" value="{{ $tanggal == 'all' ? '' : $tanggal }}">
+
+                <input type="text" name="search" placeholder="Cari nama siswa..."
+                    value="{{ request('search') }}"
+                    class="flex-grow px-3 py-3 text-sm border rounded-md dark:border-none"
+                />
+
+                <button type="submit" class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                    Filter
+                </button>
+
+                <a href="{{ route('guru.absensi.index', ['kelas_id' => $selectedKelas->id, 'tanggal' => 'all', 'status' => request('status'), 'search' => request('search'), 'mapel_id' => request('mapel_id')]) }}"
+                   class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 dark:text-gray-300">
+                   Lihat Semua Tanggal
+                </a>
+
+                @if(request('kelas_id') || request('status') || request('tanggal') != \Carbon\Carbon::today()->toDateString() || request('search') || request('mapel_id'))
+                    <a href="{{ route('guru.absensi.index', ['kelas_id' => $selectedKelas->id, 'tanggal' => \Carbon\Carbon::today()->toDateString()]) }}" class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md dark:text-gray-300 hover:bg-gray-300">Reset Filter</a>
+                @endif
+            </form>
+        </div> {{-- AKHIR DARI BARIS FILTER --}}
+
+        {{-- BARIS KEDUA: TOMBOL AKSI --}}
+        {{-- Tombol aksi juga cukup dengan 'gap-2' --}}
+        <div class="flex justify-start w-full gap-2 mb-4">
+            <a href="{{ route('guru.absensi.inputAbsensi', ['kelas_id' => $selectedKelas->id, 'tanggal' => \Carbon\Carbon::today()->toDateString(), 'mapel_id' => request('mapel_id')]) }}"
+                class="px-4 py-3 text-sm text-white bg-purple-600 rounded-md hover:bg-purple-700">
+                <i class="mr-1 fas fa-plus"></i> Input/Edit Absensi Hari Ini
+            </a>
+            <button type="button" onclick="confirmDeleteMassalAbsensi('{{ $selectedKelas->id }}', '{{ $tanggal }}', '{{ request('mapel_id') }}')"
+                class="px-4 py-3 text-sm text-white bg-red-600 rounded-md hover:bg-red-700">
+                <i class="mr-1 fas fa-trash"></i> Hapus Absensi Tanggal Ini
+            </button>
+        </div>
+
+
+        <div class="w-full overflow-x-auto rounded-lg">
+            <table class="w-full whitespace-no-wrap">
+                <thead>
+                    <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3">No</th>
+                        <th class="px-4 py-3">Tanggal</th>
+                        <th class="px-4 py-3">Siswa</th>
+                        <th class="px-4 py-3">Kelas</th>
+                        <th class="px-4 py-3">Mapel</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Keterangan</th>
+                        <th class="px-4 py-3">Waktu</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    @forelse($absensi as $index => $k)
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm">{{ $absensi->firstItem() + $index }}</td>
+                            <td class="px-4 py-3 text-sm">{{ \Carbon\Carbon::parse($k->tanggal)->format('d/m/Y') }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $k->siswa->nama ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $k->kelas->nama_kelas ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $k->mapel->nama ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm">
+                                <span class="px-2 py-1 text-xs font-semibold leading-tight rounded-full
+                                    {{ $k->status == 'Hadir' ? 'text-green-700 bg-green-100' : '' }}
+                                    {{ $k->status == 'Izin' ? 'text-blue-700 bg-blue-100' : '' }}
+                                    {{ $k->status == 'Sakit' ? 'text-orange-700 bg-orange-100' : '' }}
+                                    {{ $k->status == 'Alpa' ? 'text-red-700 bg-red-100' : '' }}
+                                    dark:bg-opacity-50
+                                ">
+                                    {{ $k->status }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm">{{ $k->keterangan ?? '-' }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $k->waktu ?? '-' }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($kehadiran as $index => $k)
-                            <tr>
-                                <td>{{ $kehadiran->firstItem() + $index }}</td>
-                                <td>{{ $k->tanggal->format('d/m/Y') }}</td>
-                                <td>{{ $k->siswa->user->name }}</td>
-                                <td>{{ $k->kelas->nama_kelas }}</td>
-                                <td>
-                                    <span class="badge bg-{{ $k->status == 'hadir' ? 'success' : ($k->status == 'izin' ? 'info' : ($k->status == 'sakit' ? 'warning' : 'danger')) }}">
-                                        {{ ucfirst($k->status) }}
-                                    </span>
-                                </td>
-                                <td>{{ $k->keterangan ?? '-' }}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="{{ route('guru.kehadiran.edit', $k->id) }}" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $k->id }}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="px-6 py-6 text-center text-gray-500">
+                                <i class="mb-2 text-3xl fas fa-clipboard-check"></i>
+                                <p class="mb-2">
+                                    @if($tanggal == \Carbon\Carbon::today()->toDateString())
+                                        Tidak ada data kehadiran untuk hari ini di kelas ini.
+                                    @elseif($tanggal == 'all')
+                                        Tidak ada data kehadiran sama sekali di kelas ini.
+                                    @else
+                                        Tidak ada data kehadiran untuk tanggal {{ \Carbon\Carbon::parse($tanggal)->format('d/m/Y') }} di kelas ini.
+                                    @endif
+                                </p>
+                                <a href="{{ route('guru.absensi.inputAbsensi', ['kelas_id' => $selectedKelas->id, 'tanggal' => \Carbon\Carbon::today()->toDateString(), 'mapel_id' => request('mapel_id')]) }}"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded hover:bg-purple-700">
+                                    <i class="mr-2 fas fa-plus"></i> Input Absensi Hari Ini
+                                </a>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-                                    <!-- Delete Modal -->
-                                    <div class="modal fade" id="deleteModal{{ $k->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $k->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteModalLabel{{ $k->id }}">Konfirmasi Hapus</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Apakah Anda yakin ingin menghapus data kehadiran ini?</p>
-                                                    <p class="text-danger"><small>Tindakan ini tidak dapat dibatalkan.</small></p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                    <form action="{{ route('guru.kehadiran.destroy', $k->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Hapus</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="py-4 text-center">
-                                    <i class="mb-3 fas fa-clipboard-check fa-3x text-muted"></i>
-                                    <p>Tidak ada data kehadiran.</p>
-                                    <a href="{{ route('guru.kehadiran.create') }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-plus me-1"></i> Input Kehadiran
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        <div class="flex flex-col items-center justify-between py-4 md:flex-row">
+            <div>
+                {{ $absensi->appends(['kelas_id' => $selectedKelas->id, 'tanggal' => $tanggal, 'status' => request('status'), 'search' => request('search'), 'mapel_id' => request('mapel_id')])->links('pagination::tailwind') }}
             </div>
-
-            <div class="mt-3 d-flex justify-content-center">
-                {{ $kehadiran->links() }}
+            <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 md:mt-0">
+                Halaman {{ $absensi->currentPage() }} dari {{ $absensi->lastPage() }} |
+                Menampilkan {{ $absensi->firstItem() }} - {{ $absensi->lastItem() }} dari total {{ $absensi->total() }} data
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    <script>
+        function confirmDeleteMassalAbsensi(kelasId, tanggal, mapelId) {
+            Swal.fire({
+                title: 'Yakin hapus absensi?',
+                html: `Apakah Anda yakin ingin menghapus **SEMUA** absensi untuk kelas ini (${kelasId}) pada tanggal <strong>${tanggal}</strong> untuk mata pelajaran ini? Tindakan ini tidak dapat dibatalkan.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus semua!',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = "{{ route('guru.absensi.destroy') }}"; 
+
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = '{{ csrf_token() }}';
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+
+                    const kelasIdInput = document.createElement('input');
+                    kelasIdInput.type = 'hidden';
+                    kelasIdInput.name = 'kelas_id';
+                    kelasIdInput.value = kelasId;
+
+                    const tanggalInput = document.createElement('input');
+                    tanggalInput.type = 'hidden';
+                    tanggalInput.name = 'tanggal';
+                    tanggalInput.value = tanggal;
+
+                    const mapelIdInput = document.createElement('input');
+                    mapelIdInput.type = 'hidden';
+                    mapelIdInput.name = 'mapel_id';
+                    mapelIdInput.value = mapelId;
+
+                    form.appendChild(csrfInput);
+                    form.appendChild(methodInput);
+                    form.appendChild(kelasIdInput);
+                    form.appendChild(tanggalInput);
+                    form.appendChild(mapelIdInput);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+    </script>
+@endsection

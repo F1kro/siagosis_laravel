@@ -2,11 +2,12 @@
     isPagesMenuOpen: false,
     currentRoute: window.location.pathname,
     checkActive(route) {
-        const regex = new RegExp(`^${route}(\\/|$)`);
-        return regex.test(this.currentRoute);
+        // pake startsWith untuk mencocokkan rute dasar
+        return this.currentRoute.startsWith(route);
     },
     updateCurrentRoute() {
         this.currentRoute = window.location.pathname;
+        // Logic untuk membuka submenu Master Data secara otomatis jika salah satu submenu-nya aktif
         this.isPagesMenuOpen = this.checkActive('/admin/siswa') ||
             this.checkActive('/admin/guru') ||
             this.checkActive('/admin/ortu') ||
@@ -21,29 +22,32 @@
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
             SIAGOSIS
         </a>
+
+        {{-- Dashboard (Admin/Guru) --}}
         <ul class="mt-6">
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/dashboard'"></span>
-                <a class="inline-flex items-center w-full text-sm font-semibold text-gray-500 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-400"
-                    href="{{ route('admin.dashboard') }}" @click="isPagesMenuOpen = false">
+                    x-show="{{ auth()->user()->role == 'admin' ? 'checkActive(\'/admin/dashboard\')' : 'checkActive(\'/guru/dashboard\')' }}"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-100"
+                    :class="{ 'text-gray-800 dark:text-gray-100': {{ auth()->user()->role == 'admin' ? 'checkActive(\'/admin/dashboard\')' : 'checkActive(\'/guru/dashboard\')' }}, 'text-gray-600 dark:text-gray-400': !({{ auth()->user()->role == 'admin' ? 'checkActive(\'/admin/dashboard\')' : 'checkActive(\'/guru/dashboard\')' }}) }"
+                    href="{{ auth()->user()->role == 'admin' ? route('admin.dashboard') : route('guru.dashboard') }}" @click="isPagesMenuOpen = false">
                     <i class="w-5 h-5 fas fa-home"></i>
                     <span class="ml-4">Dashboard</span>
                 </a>
             </li>
         </ul>
 
+        {{-- Admin Menu --}}
         @if(auth()->user()->role == 'admin')
         <ul>
             <li class="relative px-6 py-3" :class="{ 'bg-indigo-50 dark:bg-indigo-900': isPagesMenuOpen }">
                 <button
                     class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': isPagesMenuOpen, 'text-gray-600 dark:text-gray-400': !isPagesMenuOpen }"
                     @click="isPagesMenuOpen = !isPagesMenuOpen" aria-haspopup="true">
                     <span class="inline-flex items-center">
-                        <i class="w-5 h-5 fas fa-database"
-                            :class="{ 'text-indigo-600 dark:text-indigo-400': isPagesMenuOpen }"></i>
-                        <span class="ml-4" :class="{ 'text-indigo-600 dark:text-indigo-400': isPagesMenuOpen }">Master
-                            Data</span>
+                        <i class="w-5 h-5 fas fa-database"></i>
+                        <span class="ml-4">Master Data</span>
                     </span>
                     <i class="w-4 h-4 pl-0 pr-1 mr-1 fas fa-chevron-down"
                         :class="{ 'transform rotate-180': isPagesMenuOpen }"></i>
@@ -56,70 +60,65 @@
                         class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
                         aria-label="submenu">
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/siswa')
-                            }">
-                            <a class="w-full" href="{{ route('admin.siswa.index') }}"><i
-                                    class="mr-2 fas fa-user-graduate dark:hover:text-gray-100"></i>Data Siswa</a>
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/siswa') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/siswa'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/siswa') }"
+                                href="{{ route('admin.siswa.index') }}"><i
+                                    class="mr-2 fas fa-user-graduate"></i>Data Siswa</a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/guru')
-                            }">
-                            <a class="w-full" href="{{ route('admin.guru.index') }}">
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/guru') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/guru'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/guru') }"
+                                href="{{ route('admin.guru.index') }}">
                                 <i class="mr-2 fas fa-chalkboard-teacher"></i>Data Guru
                             </a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/ortu')
-                            }">
-                            <a class="w-full" href="{{ route('admin.ortu.index') }}">
-                                <i class="mr-2 fas fa-chalkboard-teacher"></i>Data Orang Tua
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/ortu') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/ortu'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/ortu') }"
+                                href="{{ route('admin.ortu.index') }}">
+                                <i class="mr-2 fas fa-user-friends"></i>Data Orang Tua
                             </a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/users')
-                            }">
-                            <a class="w-full" href="{{ route('admin.users.index') }}"><i
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/users') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/users'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/users') }"
+                                href="{{ route('admin.users.index') }}"><i
                                     class="mr-2 fas fa-user-shield"></i>Data User</a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/kelas')
-                            }">
-                            <a class="w-full" href="{{ route('admin.kelas.index') }}"><i
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/kelas') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/kelas'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/kelas') }"
+                                href="{{ route('admin.kelas.index') }}"><i
                                     class="mr-2 fas fa-door-open"></i>Data Kelas</a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/mapel')
-                            }">
-                            <a class="w-full" href="{{ route('admin.mapel.index') }}"><i
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/mapel') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/mapel'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/mapel') }"
+                                href="{{ route('admin.mapel.index') }}"><i
                                     class="mr-2 fas fa-book"></i>Data Mapel</a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                            :class="{
-                                'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive(
-                                    '/admin/guru-mapel')
-                            }">
-                            <a class="w-full" href="{{ route('admin.guru-mapel.index') }}"><i
-                                    class="mr-2 fas fa-book"></i>Data Guru Mapel</a>
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/guru-mapel') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/guru-mapel'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/guru-mapel') }"
+                                href="{{ route('admin.guru-mapel.index') }}"><i
+                                    class="mr-2 fas fa-chalkboard-teacher"></i>Data Guru Mapel
+                            </a>
                         </li>
                     </ul>
                 </template>
             </li>
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/absensi'"></span>
+                    x-show="checkActive('/admin/absensi')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/absensi'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/absensi') }"
                     href="{{ route('admin.absensi.index') }}">
                     <i class="w-5 h-5 fas fa-clipboard-list"></i>
                     <span class="ml-4">Master Absensi</span>
@@ -127,8 +126,9 @@
             </li>
             <li class="relative px-6 py-3 ">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/nilai'"></span>
+                    x-show="checkActive('/admin/nilai')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/nilai'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/nilai') }"
                     href="{{ route('admin.nilai.index') }}">
                     <i class="w-5 h-5 fas fa-star"></i>
                     <span class="ml-4">Master Nilai</span>
@@ -136,8 +136,9 @@
             </li>
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/laporan'"></span>
+                    x-show="checkActive('/admin/laporan')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/laporan'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/laporan') }"
                     href="{{ route('admin.siswa.index') }}">
                     <i class="w-5 h-5 fas fa-file-alt"></i>
                     <span class="ml-4">Master Laporan</span>
@@ -145,46 +146,123 @@
             </li>
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/berita'"></span>
+                    x-show="checkActive('/admin/berita')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/berita'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/berita') }"
                     href="{{ route('admin.berita.index') }}">
                     <i class="w-5 h-5 fas fa-newspaper"></i>
                     <span class="ml-4">Master Berita</span>
                 </a>
             </li>
         </ul>
+
+        {{-- Guru Menu --}}
         @elseif(auth()->user()->role == 'guru')
         <ul>
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/absensi'"></span>
+                    x-show="checkActive('/guru/absensi')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="{{ route('admin.absensi.index') }}">
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/guru/absensi'), 'text-gray-600 dark:text-gray-400': !checkActive('/guru/absensi') }"
+                    href="{{ route('guru.absensi.index') }}">
                     <i class="w-5 h-5 fas fa-clipboard-list"></i>
                     <span class="ml-4">Master Absensi</span>
                 </a>
             </li>
             <li class="relative px-6 py-3 ">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/nilai'"></span>
+                    x-show="checkActive('/guru/nilai')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="{{ route('admin.nilai.index') }}">
+                    :class="{'text-gray-800 dark:text-gray-100': checkActive('/guru/nilai'), 'text-gray-600 dark:text-gray-400': !checkActive('/guru/nilai')}"
+                    href="{{ route('guru.nilai.dashboard') }}">
                     <i class="w-5 h-5 fas fa-star"></i>
                     <span class="ml-4">Master Nilai</span>
                 </a>
             </li>
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
-                    x-show="currentRoute === '/admin/berita'"></span>
+                    x-show="checkActive('/guru/berita')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="#"> {{-- Contoh route guru berita --}}
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/guru/berita'), 'text-gray-600 dark:text-gray-400': !checkActive('/guru/berita') }"
+                    href="#"> {{-- <-- Pastikan rute berita guru sudah ada --}}
                     <i class="w-5 h-5 fas fa-newspaper"></i>
                     <span class="ml-4">Berita</span>
                 </a>
             </li>
         </ul>
+
+        {{-- Siswa Menu --}}
+        @elseif(auth()->user()->role == 'siswa')
+        <ul>
+            <li class="relative px-6 py-3">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/siswa/absensi')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/siswa/absensi'), 'text-gray-600 dark:text-gray-400': !checkActive('/siswa/absensi') }"
+                    href="{{ route('siswa.absensi.index') }}">
+                    <i class="w-5 h-5 fas fa-clipboard-list"></i>
+                    <span class="ml-4">Data Absensi</span>
+                </a>
+            </li>
+            <li class="relative px-6 py-3 ">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/siswa/nilai')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/siswa/nilai'), 'text-gray-600 dark:text-gray-400': !checkActive('/siswa/nilai') }"
+                    href="{{ route('siswa.nilai.index') }}">
+                    <i class="w-5 h-5 fas fa-star"></i>
+                    <span class="ml-4">Data Nilai</span>
+                </a>
+            </li>
+            <li class="relative px-6 py-3">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/siswa/berita')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/siswa/berita'), 'text-gray-600 dark:text-gray-400': !checkActive('/siswa/berita') }"
+                    href="#"> {{-- <-- Pastikan rute berita siswa sudah ada --}}
+                    <i class="w-5 h-5 fas fa-newspaper"></i>
+                    <span class="ml-4">Berita & Info Sekolah</span>
+                </a>
+            </li>
+        </ul>
+
+        {{-- Orang Tua Menu --}}
+        @elseif(auth()->user()->role == 'orangtua')
+        <ul>
+            <li class="relative px-6 py-3">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/orangtua/absensi')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/orangtua/absensi'), 'text-gray-600 dark:text-gray-400': !checkActive('/orangtua/absensi') }"
+                    href="{{ route('orangtua.absensi.index') }}">
+                    <i class="w-5 h-5 fas fa-clipboard-list"></i>
+                    <span class="ml-4">Data Absensi</span>
+                </a>
+            </li>
+            <li class="relative px-6 py-3 ">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/orangtua/nilai')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/orangtua/nilai'), 'text-gray-600 dark:text-gray-400': !checkActive('/orangtua/nilai') }"
+                    href="{{ route('orangtua.nilai.index') }}">
+                    <i class="w-5 h-5 fas fa-star"></i>
+                    <span class="ml-4">Data Nilai</span>
+                </a>
+            </li>
+            <li class="relative px-6 py-3">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/orangtua/berita')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/orangtua/berita'), 'text-gray-600 dark:text-gray-400': !checkActive('/orangtua/berita') }"
+                    href="#">
+                    <i class="w-5 h-5 fas fa-newspaper"></i>
+                    <span class="ml-4">Berita & Info Sekolah</span>
+                </a>
+            </li>
+        </ul>
         @endif
 
+        {{-- landing page button --}}
         <div class="px-6 my-6">
             <a href="{{ url('/') }}"
                 class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-400 focus:outline-none focus:shadow-outline-red">

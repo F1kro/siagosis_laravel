@@ -56,20 +56,20 @@
                                     {{ $guru->firstItem() + $index }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru->nama }}
+                                    {{ $s->guru->nama ?? '-'}}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru->nip }}
+                                    {{ $s->guru->nip ?? '-' }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru->telepon }}
+                                    {{ $s->guru->telepon ?? '-'}}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $s->guru ? ($s->guru->jenis_kelamin == 'Laki-laki' ? 'Laki-laki' : 'Perempuan') : '-' }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     @if ($s->guru && $s->guru->foto)
-                                        <img src="{{ asset('storage/' . $s->guru->foto) }}" alt="{{ $s->nama }}"
+                                        <img src="{{ asset('storage/' . $s->guru->foto ?? '-') }}" alt="{{ $s->nama ?? '-' }}"
                                             class="object-cover w-8 h-8 rounded-md">
                                     @else
                                         <div
@@ -84,7 +84,7 @@
                                             class="text-yellow-500 hover:text-yellow-700">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button onclick="confirmDelete({{ $s->id }}, '{{ $s->guru->nama }}')"
+                                        <button onclick="confirmDelete({{ $s->id }}, '{{ $s->guru->nama ?? '-'}}')"
                                             class="text-red-600 hover:text-red-800">
                                             <i class="fas fa-trash"></i>
                                         </button>

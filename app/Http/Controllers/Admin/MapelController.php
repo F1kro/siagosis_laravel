@@ -15,7 +15,8 @@ class MapelController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Mapel::query();
+        // Eager load relasi 'kelas'
+        $query = Mapel::with('kelas'); 
 
         if ($request->has('search') && !empty($request->search)) {
             $query->where('nama', 'like', '%' . $request->search . '%')
@@ -25,8 +26,7 @@ class MapelController extends Controller
         $mapel = $query->paginate(10);
         $name = Auth::user()->name;
 
-
-        return view('admin.mapel.index', compact('mapel','name'));
+        return view('admin.mapel.index', compact('mapel', 'name'));
     }
 
     /**

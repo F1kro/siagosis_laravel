@@ -18,6 +18,8 @@ class Absensi extends Model
         'status',
         'keterangan',
         'waktu',
+        'tahun_ajaran',
+        'mapel_id',
     ];
 
     public function siswa()
@@ -28,5 +30,10 @@ class Absensi extends Model
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
+    }
+
+    public function mapel() // <-- TAMBAHKAN RELASI INI
+    {
+        return $this->belongsTo(Mapel::class);
     }
 }

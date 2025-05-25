@@ -45,14 +45,14 @@ class Kelas extends Model
 
     public function mapel()
     {
-        return $this->belongsToMany(Mapel::class, 'kelas_mapel')
-            ->withPivot('tahun_ajaran')
+        return $this->belongsToMany(Mapel::class, 'kelas_mapel', 'kelas_id', 'mapel_id')
+            // ->withPivot('tahun_ajaran')
             ->withTimestamps();
     }
 
     public function waliKelas()
     {
-        return $this->belongsTo(Guru::class, 'guru_id'); 
+        return $this->belongsTo(Guru::class, 'guru_id');
     }
 
 }

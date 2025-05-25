@@ -41,6 +41,8 @@ class Guru extends Model
             ->withTimestamps();
     }
 
+    
+
     public function jadwal()
     {
         return $this->hasMany(Jadwal::class);

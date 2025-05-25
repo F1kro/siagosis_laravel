@@ -51,9 +51,7 @@ class User extends Authenticatable
         return $this->hasOne(Guru::class);
     }
 
-    /**
-     * Get the siswa record associated with the user.
-     */
+
     public function siswa()
     {
         return $this->hasOne(Siswa::class);

@@ -6,7 +6,7 @@
 <div class="w-full overflow-hidden rounded-lg">
 
     <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
-        Selamat Datang🎉, {{ $name  }}
+        Selamat Datang🎉, {{ $name }}
     </h2>
 
     <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900 ">
@@ -19,12 +19,10 @@
         <form action="{{ route('admin.mapel.index') }}" method="GET"
             class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
             <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
-                <!-- Search Input -->
                 <input type="text" name="search" placeholder="Cari Mapel..." value="{{ request('search') }}"
                     class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2" />
             </div>
 
-            <!-- Submit Button (hidden if using onchange for select) -->
             <button type="submit" class="hidden">Cari</button>
         </form>
 
@@ -46,6 +44,7 @@
                     <th class="px-4 py-3">Nama Mapel</th>
                     <th class="px-4 py-3">KKM</th>
                     <th class="px-4 py-3">Jumlah Jam</th>
+                    <th class="px-4 py-3">Untuk Kelas</th>
                     <th class="px-4 py-3">Aksi</th>
                 </tr>
             </thead>
@@ -67,7 +66,19 @@
                     <td class="px-4 py-3 text-sm">
                         {{ $s->jumlah_jam ?? '-' }}
                     </td>
-
+                    <td class="px-4 py-3 text-sm">
+                        @if ($s->kelas->isNotEmpty())
+                            @foreach ($s->kelas as $k)
+                                <span class="px-2 py-1 text-xs font-semibold leading-tight">
+                                    {{ $k->nama_kelas }}
+                                </span><br>
+                            @endforeach
+                        @else
+                            <span class="px-2 py-1 text-xs font-semibold leading-tight ">
+                                Belum ada kelas
+                            </span>
+                        @endif
+                    </td>
                     <td class="px-4 py-3">
                         <div class="flex items-center space-x-4 text-sm">
                             <a href="{{ route('admin.mapel.edit', $s->id) }}" class="text-yellow-500 hover:text-yellow-700">
@@ -82,7 +93,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-6 text-center text-gray-500">
+                    <td colspan="7" class="px-6 py-6 text-center text-gray-500"> {{-- <-- UBAH colspan SESUAI JUMLAH KOLOM --}}
                         <i class="mb-2 text-3xl fas fa-user-slash"></i>
                         <p class="mb-2">Tidak ada data mapel</p>
                         <a href="{{ route('admin.mapel.create') }}"

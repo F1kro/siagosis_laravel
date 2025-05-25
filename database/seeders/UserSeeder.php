@@ -12,9 +12,28 @@ class UserSeeder extends Seeder
         // Manual users
         User::create([
             'name' => 'admin',
-            'email' => 'admin@school.com',
+            'email' => 'admin@siagosis.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
+        ]);
+
+        User::create([
+            'name' => 'juan',
+            'email' => 'juan@siagosis.com',
+            'password' => Hash::make('password'),
+            'role' => 'guru',
+        ]);
+        User::create([
+            'name' => 'opik',
+            'email' => 'opik@siagosis.com',
+            'password' => Hash::make('password'),
+            'role' => 'orangtua',
+        ]);
+        User::create([
+            'name' => 'majdi',
+            'email' => 'majdi@siagosis.com',
+            'password' => Hash::make('password'),
+            'role' => 'siswa',
         ]);
     }
 
