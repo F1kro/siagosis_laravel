@@ -54,7 +54,7 @@ class AbsensiController extends Controller
 
         $kelasId = $request->query('kelas_id');
         $tanggal = $request->query('tanggal', Carbon::today()->toDateString());
-        $mapelId = $request->query('mapel_id'); // Pastikan ini juga ada di request
+        $mapelId = $request->query('mapel_id');
 
         if (!$kelasId) {
             return redirect()->route('guru.absensi.dashboard')->with('error', 'Silakan pilih kelas terlebih dahulu.');
@@ -84,7 +84,7 @@ class AbsensiController extends Controller
         }
         if ($allowedMapelIds->isEmpty()) { $allowedMapelIds = [0]; }
 
-        $query = Absensi::with(['siswa.user', 'kelas', 'mapel']); // Eager load 'mapel'
+        $query = Absensi::with(['siswa.user', 'kelas', 'mapel']);
 
         $query->where('kelas_id', $kelasId);
 
@@ -154,7 +154,7 @@ class AbsensiController extends Controller
 
         $existingAbsensi = Absensi::where('kelas_id', $kelasId)
                                   ->whereDate('tanggal', $tanggal)
-                                  ->where('mapel_id', $mapelId) // Tambahkan filter mapel_id di sini
+                                  ->where('mapel_id', $mapelId) 
                                   ->get()
                                   ->keyBy('siswa_id');
 
@@ -184,7 +184,7 @@ class AbsensiController extends Controller
     /**
      * Menyimpan atau memperbarui data absensi secara massal.
      */
-    public function store(Request $request) // <-- PERBAIKAN DI SINI: Hapus $kelasId, $tanggal
+    public function store(Request $request)
     {
         $request->validate([
             'kelas_id' => 'required|exists:kelas,id',
@@ -199,9 +199,9 @@ class AbsensiController extends Controller
         ]);
 
         $guru = Auth::user()->guru;
-        $kelasId = $request->input('kelas_id'); // Ambil dari input
-        $tanggal = $request->input('tanggal'); // Ambil dari input
-        $mapelId = $request->input('mapel_id'); // Ambil dari input
+        $kelasId = $request->input('kelas_id');
+        $tanggal = $request->input('tanggal');
+        $mapelId = $request->input('mapel_id');
         $semester = $request->input('semester');
         $tahunAjaran = $request->input('tahun_ajaran');
 

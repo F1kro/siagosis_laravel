@@ -18,13 +18,11 @@
             </p>
         </div>
 
-        {{-- BARIS PERTAMA: SEMUA FILTER --}}
         <div class="flex flex-col items-start gap-4 mb-4 md:flex-row md:items-center">
             <form action="{{ route('guru.absensi.index', ['kelas_id' => $selectedKelas->id]) }}" method="GET"
-                  class="flex flex-wrap items-center w-full gap-2"> {{-- <-- CUKUP DENGAN gap-2 DI SINI --}}
+                  class="flex flex-wrap items-center w-full gap-2">
                 <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
 
-                {{-- Setiap elemen di sini akan memiliki jarak otomatis karena 'gap-2' --}}
                 <select name="mapel_id" class="px-3 py-3 text-sm border rounded-md dark:border-none">
                     <option value="">Semua Mapel</option>
                     @foreach($mapelOptions as $mapel)
@@ -60,14 +58,13 @@
                     <a href="{{ route('guru.absensi.index', ['kelas_id' => $selectedKelas->id, 'tanggal' => \Carbon\Carbon::today()->toDateString()]) }}" class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md dark:text-gray-300 hover:bg-gray-300">Reset Filter</a>
                 @endif
             </form>
-        </div> {{-- AKHIR DARI BARIS FILTER --}}
+        </div>
 
-        {{-- BARIS KEDUA: TOMBOL AKSI --}}
-        {{-- Tombol aksi juga cukup dengan 'gap-2' --}}
         <div class="flex justify-start w-full gap-2 mb-4">
-            <a href="{{ route('guru.absensi.inputAbsensi', ['kelas_id' => $selectedKelas->id, 'tanggal' => \Carbon\Carbon::today()->toDateString(), 'mapel_id' => request('mapel_id')]) }}"
+            {{-- PERBAIKAN DI SINI: Gunakan $tanggal aktif dari halaman index --}}
+            <a href="{{ route('guru.absensi.inputAbsensi', ['kelas_id' => $selectedKelas->id, 'tanggal' => $tanggal, 'mapel_id' => request('mapel_id')]) }}"
                 class="px-4 py-3 text-sm text-white bg-purple-600 rounded-md hover:bg-purple-700">
-                <i class="mr-1 fas fa-plus"></i> Input/Edit Absensi Hari Ini
+                <i class="mr-1 fas fa-plus"></i> Input/Edit Absensi Tanggal Ini
             </a>
             <button type="button" onclick="confirmDeleteMassalAbsensi('{{ $selectedKelas->id }}', '{{ $tanggal }}', '{{ request('mapel_id') }}')"
                 class="px-4 py-3 text-sm text-white bg-red-600 rounded-md hover:bg-red-700">
@@ -162,7 +159,7 @@
                 if (result.isConfirmed) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = "{{ route('guru.absensi.destroy') }}"; 
+                    form.action = "{{ route('guru.absensi.destroy') }}";
 
                     const csrfInput = document.createElement('input');
                     csrfInput.type = 'hidden';

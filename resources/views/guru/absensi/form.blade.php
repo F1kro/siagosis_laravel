@@ -14,6 +14,7 @@
                 <span class="mx-2">/</span>
                 <a href="{{ route('guru.absensi.dashboard') }}" class="hover:underline">Pilih Kelas Absensi</a>
                 <span class="mx-2">/</span>
+                {{-- PERBAIKAN DI SINI: Tambahkan mapel_id ke route index --}}
                 <a href="{{ route('guru.absensi.index', ['kelas_id' => $selectedKelas->id, 'tanggal' => $tanggal, 'mapel_id' => $mapelId]) }}" class="hover:underline">Data Kehadiran</a>
                 <span class="mx-2">/</span>
                 Input/Edit Absensi
@@ -24,9 +25,11 @@
             <form action="{{ route('guru.absensi.store') }}" method="POST">
                 @csrf
 
+                {{-- Hidden Inputs --}}
                 <input type="hidden" name="kelas_id" value="{{ $selectedKelas->id }}">
                 <input type="hidden" name="tanggal" value="{{ $tanggal }}">
 
+                {{-- Pilihan Semester dan Tahun Ajaran --}}
                 <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
                     <div>
                         <label class="block text-sm">
@@ -81,7 +84,6 @@
                     </div>
                 </div>
 
-                {{-- Pilihan Mata Pelajaran (Dropdown Utama untuk Absensi per Mapel) --}}
                 <div class="mb-4">
                     <label for="mapel_id" class="block text-sm">
                         <span class="text-gray-700 dark:text-gray-400">Mata Pelajaran:</span>
@@ -107,22 +109,20 @@
                 <div class="w-full overflow-x-auto rounded-lg shadow-md">
                     <table class="w-full whitespace-no-wrap">
                         <thead>
-                            {{-- Header Utama --}}
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                                 <th class="px-4 py-3">No</th>
                                 <th class="px-4 py-3">Nama</th>
-                                <th class="px-4 py-3 text-center" colspan="4">Status Kehadiran</th> {{-- Colspan 4 untuk 4 status --}}
+                                <th class="px-4 py-3 text-center" colspan="4">Status Kehadiran</th>
                                 <th class="px-4 py-3">Keterangan</th>
                                 <th class="px-4 py-3">Waktu Input</th>
                             </tr>
-                            {{-- Sub-Header untuk Status Kehadiran --}}
                             <tr class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                <th colspan="2"></th> {{-- Colspan 2 untuk 'No' dan 'Nama' --}}
+                                <th colspan="2"></th>
                                 <th class="px-4 py-1">Hadir</th>
                                 <th class="px-4 py-1">Izin</th>
                                 <th class="px-4 py-1">Sakit</th>
                                 <th class="px-4 py-1">Alpa</th>
-                                <th colspan="2"></th> {{-- Colspan 2 untuk 'Keterangan' dan 'Waktu Input' --}}
+                                <th colspan="2"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -134,7 +134,6 @@
                                         <input type="hidden" name="absensi_data[{{ $index }}][siswa_id]" value="{{ $siswa->id }}">
                                     </td>
 
-                                    {{-- Kolom Radio Buttons --}}
                                     <td class="px-4 py-3 text-center">
                                         <input type="radio" class="text-green-500 form-radio dark:bg-gray-700 dark:border-gray-600"
                                             name="absensi_data[{{ $index }}][status]" value="Hadir" required
@@ -156,7 +155,6 @@
                                             {{ old('absensi_data.' . $index . '.status', $formattedExistingAbsensi[$siswa->id]['status'] ?? 'Hadir') == 'Alpa' ? 'checked' : '' }}>
                                     </td>
 
-                                    {{-- Kolom Keterangan dan Waktu Input --}}
                                     <td class="px-4 py-3 text-sm">
                                         <input type="text" name="absensi_data[{{ $index }}][keterangan]"
                                             class="block w-full text-sm form-input dark:bg-gray-700 dark:text-gray-300"
@@ -171,7 +169,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="px-6 py-6 text-center text-gray-500"> {{-- colspan disesuaikan --}}
+                                    <td colspan="8" class="px-6 py-6 text-center text-gray-500">
                                         <p>Tidak ada siswa di kelas ini.</p>
                                     </td>
                                 </tr>
