@@ -16,7 +16,7 @@ class MapelController extends Controller
     public function index(Request $request)
     {
         // Eager load relasi 'kelas'
-        $query = Mapel::with('kelas'); 
+        $query = Mapel::with('kelas');
 
         if ($request->has('search') && !empty($request->search)) {
             $query->where('nama', 'like', '%' . $request->search . '%')
@@ -121,3 +121,4 @@ class MapelController extends Controller
         return redirect()->route('admin.mapel.index')->with('success', 'Data mapel berhasil dihapus.');
     }
 }
+

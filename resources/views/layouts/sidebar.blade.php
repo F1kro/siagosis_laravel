@@ -14,6 +14,7 @@
             this.checkActive('/admin/users') ||
             this.checkActive('/admin/kelas') ||
             this.checkActive('/admin/mapel') ||
+            this.checkActive('/admin/jadwal') ||
             this.checkActive('/admin/guru-mapel');
     }
 }"
@@ -80,6 +81,14 @@
                                 :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/ortu'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/ortu') }"
                                 href="{{ route('admin.ortu.index') }}">
                                 <i class="mr-2 fas fa-user-friends"></i>Data Orang Tua
+                            </a>
+                        </li>
+                        <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            :class="{ 'bg-red-100 dark:bg-red-600 text-red-600 dark:text-gray-300 dark:rounded-md rounded-md': checkActive('/admin/jadwal') }">
+                            <a class="w-full"
+                                :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/admin/jadwal'), 'text-gray-600 dark:text-gray-400': !checkActive('/admin/jadwal') }"
+                                href="{{ route('admin.jadwal.index') }}">
+                                <i class="mr-2 fas fa-user-friends"></i>Data Jadwal
                             </a>
                         </li>
                         <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
@@ -179,12 +188,22 @@
                     <span class="ml-4">Master Nilai</span>
                 </a>
             </li>
+            <li class="relative px-6 py-3 ">
+                <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
+                    x-show="checkActive('/guru/jadwal')"></span>
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    :class="{'text-gray-800 dark:text-gray-100': checkActive('/guru/jadwal'), 'text-gray-600 dark:text-gray-400': !checkActive('/guru/jadwal')}"
+                    href="{{ route('guru.jadwal.semua') }}">
+                    <i class="w-5 h-5 fas fa-star"></i>
+                    <span class="ml-4">Master jadwal</span>
+                </a>
+            </li>
             <li class="relative px-6 py-3">
                 <span class="absolute inset-y-0 left-0 w-3 bg-red-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"
                     x-show="checkActive('/guru/berita')"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     :class="{ 'text-gray-800 dark:text-gray-100': checkActive('/guru/berita'), 'text-gray-600 dark:text-gray-400': !checkActive('/guru/berita') }"
-                    href="#"> {{-- <-- Pastikan rute berita guru sudah ada --}}
+                    href="{{ route('guru.berita.index') }}">
                     <i class="w-5 h-5 fas fa-newspaper"></i>
                     <span class="ml-4">Berita</span>
                 </a>

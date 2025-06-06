@@ -1,8 +1,21 @@
+{{-- foto profil di navbar --}}
+@php
+$user = Auth::user();
+if ($user->isGuru()) {
+    $photo = $user->guru->foto ?? 'default.jpg';
+} elseif ($user->isSiswa()) {
+    $photo = $user->siswa->foto ?? 'default.jpg';
+} elseif ($user->isOrangtua()) {
+    $photo = $user->orangtua->foto ?? 'default.jpg';
+} else {
+    $photo = 'default.jpg';
+}
+@endphp
+
 <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
     <div
       class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300"
     >
-      <!-- Mobile hamburger -->
       <button
         class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
         @click="toggleSideMenu"
@@ -164,12 +177,12 @@
             aria-label="Account"
             aria-haspopup="true"
           >
-            <img
-              class="object-cover w-8 h-8 rounded-full"
-              src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
-              alt=""
-              aria-hidden="true"
-            />
+
+          <img
+          class="object-cover w-8 h-8 rounded-full"
+          src="{{ asset('storage/' . $photo) }}"
+          alt="Foto Profil"
+        />
           </button>
           <template x-if="isProfileMenuOpen">
             <ul
@@ -184,7 +197,7 @@
               <li class="flex">
                 <a
                   class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                  href="#"
+                  href="{{ route('user.profile') }}"
                 >
                   <svg
                     class="w-4 h-4 mr-3"
@@ -201,29 +214,6 @@
                     ></path>
                   </svg>
                   <span>Profile</span>
-                </a>
-              </li>
-              <li class="flex">
-                <a
-                  class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                  href="#"
-                >
-                  <svg
-                    class="w-4 h-4 mr-3"
-                    aria-hidden="true"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    ></path>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  </svg>
-                  <span>Settings</span>
                 </a>
               </li>
               <li class="flex">

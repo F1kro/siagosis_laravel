@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AbsensiController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GuruController;
@@ -24,9 +25,10 @@ use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\JadwalController as SiswaJadwalController;
 use App\Http\Controllers\Siswa\MapelController as SiswaMapelController;
 use App\Http\Controllers\Siswa\NilaiController as SiswaNilaiController;
+use App\Http\Controllers\Guru\BeritaController as GuruBeritaController;
+use App\Http\Controllers\Guru\JadwalController as GuruJadwalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureUserHasRole;
-
 
 Route::get('/', function () {
     return view('landing_page');
@@ -169,6 +171,11 @@ Route::middleware(['auth', EnsureUserHasRole::class.':guru'])->prefix('guru')->n
         'destroy' => 'nilai.destroy',
     ])->except('show');
 
+    Route::resource('berita', GuruBeritaController::class)->names([
+        'index' => 'berita.index',
+        'show' => 'berita.show',
+    ])->except('create, update, store, edit , destroy');
+
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/', [GuruAbsensiController::class, 'dashboard'])->name('dashboard');
         Route::get('/daftar-kehadiran', [GuruAbsensiController::class, 'index'])->name('index');
@@ -177,15 +184,15 @@ Route::middleware(['auth', EnsureUserHasRole::class.':guru'])->prefix('guru')->n
         Route::delete('/hapus-massal', [GuruAbsensiController::class, 'destroy'])->name('destroy');
     });
 
+    Route::get('jadwal/semua', [GuruJadwalController::class, 'daftarSemuaJadwal'])->name('jadwal.semua');
+
     Route::get('nilai/dashboard', [GuruNilaiController::class, 'dashboard'])->name('nilai.dashboard');
 
     Route::get('absensi/dashboard', [GuruAbsensiController::class, 'dashboard'])->name('absensi.dashboard');
 
     Route::get('absensi/inputAbsensi', [GuruAbsensiController::class, 'inputAbsensi'])->name('absensi.inputAbsensi');
 
-
 });
-
 
 // Siswa Routes
 Route::middleware(['auth', EnsureUserHasRole::class.':siswa'])->prefix('siswa')->name('siswa.')->group(function () {
@@ -228,6 +235,13 @@ Route::middleware(['auth', EnsureUserHasRole::class.':orangtua'])->prefix('orang
     // Route::get('berita/{berita}', [OrangtuaBeritaController::class, 'show'])->name('berita.show');
 });
 
+// profile route
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::patch('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update'); // Changed to PATCH
+    Route::patch('/profile/update-password', [UserController::class, 'updatePassword'])->name('user.profile.update-password'); // Changed to PATCH
+    Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('user.profile.update-photo'); // <<< ADD THIS LINE
+});
 route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Require auth routes

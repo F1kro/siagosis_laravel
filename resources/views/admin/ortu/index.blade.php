@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Orang Tua')
+@section('title', 'SIAGOSIS | MASTER ORTU')
 
 @section('content')
     <div class="w-full overflow-hidden rounded-lg ">

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
-            Selamat Datang,{{ $guru->jenis_kelamin === "Laki-laki" ? " Pak " : "Bu " }} {{ $name }} 🎉🎉
+            Selamat Datang,{{ $guru->jenis_kelamin === 'Laki-laki' ? ' Pak ' : 'Bu ' }} {{ $name }} 🎉🎉
         </h2>
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <p class="text-sm font-bold text-gray-600 dark:text-gray-400">
@@ -47,10 +47,10 @@
                 </div>
                 <div>
                     <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Total Kelas yang Diajar
+                        Total Kelas Wali
                     </p>
                     <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{-- {{ $totalKelas }} --}}
+                        {{ $totalKelas }}
                     </p>
                 </div>
             </div>
@@ -74,24 +74,41 @@
                 </div>
             </div>
 
-            <!-- Card: Jadwal Mengajar -->
-            <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <div class="p-3 mr-4 text-purple-500 bg-purple-100 rounded-full dark:text-purple-100 dark:bg-purple-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M8 7V3m8 4V3m-9 8h10m-11 4h12M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Jadwal Mengajar Hari Ini
+            <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                <h4 class="mb-3 text-base font-semibold text-gray-700 dark:text-gray-200">
+                    Jadwal Hari Ini ({{ \Carbon\Carbon::now()->locale('id_ID')->isoFormat('dddd') }})
+                </h4>
+                @if ($jadwalHariIni && $jadwalHariIni->isNotEmpty())
+                    <div class="space-y-3 text-sm">
+                        @foreach ($jadwalHariIni as $jadwal)
+                            <div class="pb-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                                <p class="font-semibold text-gray-800 dark:text-gray-300">
+                                    {{ $jadwal->mapel->nama ?? 'Mapel Tidak Tersedia' }}
+                                </p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">
+                                    <span class="font-medium">Waktu:</span> {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}
+                                </p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">
+                                    <span class="font-medium">Kelas:</span> {{ $jadwal->kelas->nama_kelas ?? 'Kelas Tidak Tersedia' }}
+                                </p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">
+                                    <span class="font-medium">Ruangan:</span> {{ $jadwal->ruangan ?? '-' }}
+                                </p>
+                                {{-- <p class="text-xs mt-1 text-gray-500 dark:text-gray-300">
+                                    T.A: {{ $jadwal->tahun_ajaran ?? '-' }} | Semester: {{ $jadwal->semester ?? '-' }}
+                                </p> --}}
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Tidak ada jadwal mengajar untuk hari ini.
                     </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{-- {{ $jadwalHariIni ?? 'Tidak ada jadwal hari ini' }} --}}
-                    </p>
-                </div>
+                @endif
             </div>
+
+        </div>
+
         </div>
 
         <!-- Info Sekolah -->
@@ -125,7 +142,8 @@
                     @foreach ($recentBerita as $berita)
                         <div class="p-4 border rounded-lg dark:border-gray-700">
                             <div class="flex items-center mb-2">
-                                <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full dark:bg-blue-200">
+                                <span
+                                    class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full dark:bg-blue-200">
                                     {{ $berita->kategori }}
                                 </span>
                                 <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
@@ -138,8 +156,8 @@
                     @endforeach
                 </div>
                 <div class="mt-4 text-right">
-                    <a href="#"
-                       class="text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
+                    <a href="{{ route('guru.berita.index') }}"
+                        class="text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
                         Lihat semua berita →
                     </a>
                 </div>

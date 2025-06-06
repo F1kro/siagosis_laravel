@@ -15,7 +15,7 @@ class AbsensiController extends Controller
     public function index(Request $request)
     {
         // Ambil filter dari request
-        $kelasId = $request->kelas_id;
+        $kelasId = $request->kelas_id; 
         $status = $request->status;
         $semester = $request->semester;
         $tahunAjaran = $request->tahun_ajaran;

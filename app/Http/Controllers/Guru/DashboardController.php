@@ -3,11 +3,9 @@ namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\Siswa;
-use App\Models\Mapel;
-use App\Models\Kelas;
 use App\Models\Berita;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -19,21 +17,43 @@ class DashboardController extends Controller
 
         $totalSiswa = 0;
         $totalMapel = 0;
-        if ($guru) {
-            // Total mapel yang dia ajar
-            $totalMapel = $guru->mapel()->count();
+        $totalKelas = 0;
+        $kelasIds = collect();
+        $jadwalHariIni = collect(); // Inisialisasi jadwal hari ini
 
-            // Total siswa di semua kelas yang dia ampu
+        if ($guru) {
+            $totalMapel = $guru->mapel()->count();
             $kelasIds = $guru->kelas()->pluck('id');
-            $totalSiswa = Siswa::whereIn('kelas_id', $kelasIds)->count();
+
+            if ($kelasIds->isNotEmpty()) {
+                $totalSiswa = Siswa::whereIn('kelas_id', $kelasIds->all())->count();
+            }
+
+            $totalKelas = $kelasIds->unique()->count();
+
+            // Mengambil jadwal mapel yang diajar hari ini
+            $hariIniStr = Carbon::now()->locale('id_ID')->isoFormat('dddd');
+
+            $jadwalHariIni = $guru->jadwal()
+                                  ->where('hari', $hariIniStr)
+                                  ->with(['mapel', 'kelas'])
+                                  ->orderBy('jam_mulai')
+                                  ->get();
         }
 
-        // Berita terbaru yang ditujukan untuk guru
-        $recentBerita = Berita::where('status', 'Published') // misal ada kolom audience untuk target berita
-                            ->latest()
-                            ->take(5)
-                            ->get();
+        $recentBerita = Berita::where('status', 'Published')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        return view('guru.dashboard', compact('name', 'totalSiswa', 'totalMapel', 'recentBerita', 'guru'));
+        return view('guru.dashboard', compact(
+            'name',
+            'totalSiswa',
+            'totalMapel',
+            'totalKelas',
+            'recentBerita',
+            'guru',
+            'jadwalHariIni'
+        ));
     }
 }

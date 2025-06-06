@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Guru Mapel')
+@section('title', 'SIAGOSIS | MASTER GURU-MAPEL')
 
 @section('content')
 <div class="w-full overflow-hidden rounded-lg">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Kehadiran Kelas ' . ($selectedKelas->nama_kelas ?? ''))
+@section('title', 'GURU | DATA ABSENSI > ' . ($selectedKelas->nama_kelas ?? ''))
 
 @section('content')
     <div class="w-full overflow-hidden rounded-lg">
