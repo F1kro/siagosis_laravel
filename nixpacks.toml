@@ -1,0 +1,15 @@
+# File: nixpacks.toml
+
+[phases.setup]
+pkgs = [
+    "php82",
+    "php82Packages.composer",
+    "php82Packages.pdo_mysql",
+    "php82Packages.gd",
+    "php82Packages.intl",
+    "php82Packages.bcmath",
+    "php82Packages.zip"
+]
+
+[start]
+cmd = "php artisan serve --host 0.0.0.0 --port $PORT"
