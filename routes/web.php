@@ -25,6 +25,7 @@ use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\Siswa\JadwalController as SiswaJadwalController;
 use App\Http\Controllers\Siswa\MapelController as SiswaMapelController;
 use App\Http\Controllers\Siswa\NilaiController as SiswaNilaiController;
+use App\Http\Controllers\Siswa\AbsensiController as SiswaAbsensiController;
 use App\Http\Controllers\Guru\BeritaController as GuruBeritaController;
 use App\Http\Controllers\Guru\JadwalController as GuruJadwalController;
 use App\Http\Controllers\Siswa\TodoListController as  TodoListController;
@@ -209,11 +210,14 @@ Route::middleware(['auth', EnsureUserHasRole::class.':siswa'])->prefix('siswa')-
     // Nilai
     Route::get('nilai', [SiswaNilaiController::class, 'index'])->name('nilai.index');
 
-    Route::get('absensi', [SiswaNilaiController::class, 'index'])->name('absensi.index');
+    // Absensi
+    Route::get('absensi', [SiswaAbsensiController::class, 'index'])->name('absensi.index');
 
     // Berita
-    Route::get('berita', [SiswaBeritaController::class, 'index'])->name('berita.index');
-    Route::get('berita/{berita}', [SiswaBeritaController::class, 'show'])->name('berita.show');
+    Route::resource('berita', SiswaBeritaController::class)->names([
+        'index' => 'berita.index',
+        'show' => 'berita.show',
+    ])->except('create, update, store, edit , destroy');
 
     //todolist
     Route::resource('todolist', TodoListController::class)->names([

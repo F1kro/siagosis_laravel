@@ -47,4 +47,8 @@ class Mapel extends Model
             ->withTimestamps();
     }
 
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class);
+    }
 }

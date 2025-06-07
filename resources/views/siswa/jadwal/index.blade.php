@@ -1,115 +1,67 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="h4 font-weight-bold">
-            {{ __('Jadwal Pelajaran') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="card">
-        <div class="card-body">
-            <ul class="mb-4 nav nav-tabs" id="jadwalTab" role="tablist">
-                @foreach(['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $index => $hari)
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link {{ $index === 0 ? 'active' : '' }}" id="{{ $hari }}-tab" data-bs-toggle="tab" data-bs-target="#{{ $hari }}" type="button" role="tab" aria-controls="{{ $hari }}" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
-                            {{ ucfirst($hari) }}
-                        </button>
-                    </li>
-                @endforeach
-            </ul>
+@section('content')
+<div class="container grid px-6 mx-auto">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Jadwal Pelajaran Kelas {{ $siswa->kelas->nama_kelas ?? '' }}
+    </h2>
 
-            <div class="tab-content" id="jadwalTabContent">
-                @foreach(['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $index => $hari)
-                    <div class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}" id="{{ $hari }}" role="tabpanel" aria-labelledby="{{ $hari }}-tab">
-                        @php
-                            $jadwalHari = $jadwal->where('hari', $hari)->sortBy('jam_mulai');
-                        @endphp
+    @if ($jadwalSiswa->isNotEmpty())
+        @foreach ($jadwalSiswa as $hari => $jadwalsPadaHariIni)
+            <div class="mb-8">
+                <h3 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-300">
+                    {{ $hari }}
+                </h3>
 
-                        @if($jadwalHari->count() > 0)
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Jam</th>
-                                            <th>Mata Pelajaran</th>
-                                            <th>Guru</th>
-                                            <th>Ruangan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($jadwalHari as $j)
-                                            <tr>
-                                                <td>{{ substr($j->jam_mulai, 0, 5) }} - {{ substr($j->jam_selesai, 0, 5) }}</td>
-                                                <td>{{ $j->mapel->nama }}</td>
-                                                <td>{{ $j->guru->user->name }}</td>
-                                                <td>{{ $j->ruangan ?? '-' }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @else
-                            <div class="py-5 text-center">
-                                <i class="mb-3 fas fa-calendar-times fa-3x text-muted"></i>
-                                <p>Tidak ada jadwal pada hari {{ ucfirst($hari) }}.</p>
-                            </div>
-                        @endif
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-4 row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="bg-white card-header">
-                    <h5 class="mb-0">Jadwal Mingguan</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr class="bg-light">
-                                    <th width="10%">Jam</th>
-                                    @foreach(['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $hari)
-                                        <th width="15%">{{ ucfirst($hari) }}</th>
-                                    @endforeach
+                <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="hidden md:table-header-group">
+                                <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                    <th class="px-4 py-3">Waktu</th>
+                                    <th class="px-4 py-3">Mata Pelajaran</th>
+                                    <th class="px-4 py-3">Guru Pengajar</th>
+                                    <th class="px-4 py-3">Ruangan</th>
+                                    <th class="px-4 py-3">T.A./Semester</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach($jamPelajaran as $jam)
-                                    <tr>
-                                        <td class="align-middle">{{ substr($jam['mulai'], 0, 5) }} - {{ substr($jam['selesai'], 0, 5) }}</td>
-
-                                        @foreach(['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $hari)
-                                            <td>
-                                                @php
-                                                    $jadwalCell = $jadwal->where('hari', $hari)
-                                                                        ->where('jam_mulai', $jam['mulai'])
-                                                                        ->where('jam_selesai', $jam['selesai'])
-                                                                        ->first();
-                                                @endphp
-
-                                                @if($jadwalCell)
-                                                    <div class="p-2 rounded {{ $jadwalCell->mapel->kelompok == 'Umum' ? 'bg-info' : ($jadwalCell->mapel->kelompok == 'Peminatan' ? 'bg-warning' : 'bg-success') }} bg-opacity-10">
-                                                        <div class="fw-bold">{{ $jadwalCell->mapel->nama }}</div>
-                                                        <div class="small">{{ $jadwalCell->guru->user->name }}</div>
-                                                        @if($jadwalCell->ruangan)
-                                                            <div class="small text-muted">{{ $jadwalCell->ruangan }}</div>
-                                                        @endif
-                                                    </div>
-                                                @else
-                                                    <div class="text-center text-muted">-</div>
-                                                @endif
-                                            </td>
-                                        @endforeach
-                                    </tr>
+                            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                @foreach ($jadwalsPadaHariIni->sortBy('jam_mulai') as $jadwal)
+                                <tr class="flex flex-col px-4 py-3 text-gray-700 border-b md:table-row dark:border-gray-700 dark:text-gray-400">
+                                    <td class="flex justify-between py-1 md:table-cell md:py-3 md:px-4 md:text-sm">
+                                        <span class="font-semibold md:hidden">Waktu</span>
+                                        <span>{{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}</span>
+                                    </td>
+                                    <td class="flex justify-between py-1 md:table-cell md:py-3 md:px-4 md:text-sm">
+                                        <span class="font-semibold md:hidden">Mata Pelajaran</span>
+                                        <span>{{ $jadwal->mapel->nama ?? 'N/A' }}</span>
+                                    </td>
+                                    <td class="flex justify-between py-1 md:table-cell md:py-3 md:px-4 md:text-sm">
+                                        <span class="font-semibold md:hidden">Guru Pengajar</span>
+                                        <span>{{ $jadwal->guru->nama ?? 'N/A' }}</span>
+                                    </td>
+                                    <td class="flex justify-between py-1 md:table-cell md:py-3 md:px-4 md:text-sm">
+                                        <span class="font-semibold md:hidden">Ruangan</span>
+                                        <span>{{ $jadwal->ruangan ?? '-' }}</span>
+                                    </td>
+                                    <td class="flex justify-between py-1 md:table-cell md:py-3 md:px-4 md:text-sm">
+                                        <span class="font-semibold md:hidden">T.A./Semester</span>
+                                        <span>{{ $jadwal->tahun_ajaran ?? '-' }} / <span class="capitalize">{{ $jadwal->semester ?? '-' }}</span></span>
+                                    </td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+        @endforeach
+    @else
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <p class="text-sm text-center text-gray-600 dark:text-gray-400">
+                Tidak ada jadwal pelajaran yang tersedia untuk kelas Anda.
+            </p>
         </div>
-    </div>
-</x-app-layout>
+    @endif
+</div>
+@endsection

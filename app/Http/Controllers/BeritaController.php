@@ -1,54 +1,44 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guru;
 
+use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BeritaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Berita::query();
+        $name = Auth::user()->name;
 
-        // Search functionality
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where('judul', 'like', '%' . $request->search . '%')
-                  ->orWhere('konten', 'like', '%' . $request->search . '%');
-        }
+        $beritas = Berita::with('user')
+                        ->where('status', 'Published')
+                        ->latest()
+                        ->paginate(5);
 
-        // Filter by kategori
-        if ($request->has('kategori') && !empty($request->kategori)) {
-            $query->where('kategori', $request->kategori);
-        }
-
-        $berita = $query->orderBy('tanggal', 'desc')->paginate(9);
-
-        return view('berita.index', compact('berita'));
+        return view('siswa.berita.index', compact('beritas', 'name'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  string  $slug
-     * @return \Illuminate\Http\Response
-     */
-    public function show($slug)
+    public function show(Berita $beritum)
     {
-        $berita = Berita::where('slug', $slug)->firstOrFail();
+        if ($beritum->status !== 'Published') {
+            abort(404);
+        }
+        $name = Auth::user()->name;
 
-        // Get related news
-        $beritaTerkait = Berita::where('kategori', $berita->kategori)
-            ->where('id', '!=', $berita->id)
-            ->orderBy('tanggal', 'desc')
-            ->take(3)
-            ->get();
+        $beritaTerkait = Berita::where('status', 'Published')
+                                ->where('kategori', $beritum->kategori)
+                                ->where('id', '!=', $beritum->id)
+                                ->latest()
+                                ->take(4)
+                                ->get();
 
-        return view('berita.show', compact('berita', 'beritaTerkait'));
+        return view('siswa.berita.show', [
+            'berita' => $beritum,
+            'beritaTerkait' => $beritaTerkait,
+            'name' => $name
+        ]);
     }
 }
