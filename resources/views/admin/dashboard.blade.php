@@ -126,27 +126,37 @@
                 </h4>
 
                 <div class="space-y-4">
-                    <div class="p-4 border rounded-lg dark:border-gray-700">
-                        <div class="flex items-center mb-2">
-                            <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full dark:bg-blue-200">Info</span>
-                            <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">2 jam yang lalu</span>
-                        </div>
-                        <h5 class="mb-1 font-medium text-gray-800 dark:text-gray-200">Penerimaan Peserta Didik Baru 2024</h5>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Pendaftaran dibuka mulai 1 Juni - 15 Juli 2024...</p>
-                    </div>
+                    @forelse ($recentBerita as $berita)
+                        <div class="p-4 border rounded-lg dark:border-gray-700">
+                            <div class="flex items-center mb-2">
+                                @if(strtolower($berita->kategori) == 'info')
+                                    <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full dark:bg-blue-200 dark:text-blue-800">Info</span>
+                                @elseif(strtolower($berita->kategori) == 'acara')
+                                    <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full dark:bg-green-200 dark:text-green-800">Acara</span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full dark:bg-gray-200 dark:text-gray-800">{{ $berita->kategori }}</span>
+                                @endif
 
-                    <div class="p-4 border rounded-lg dark:border-gray-700">
-                        <div class="flex items-center mb-2">
-                            <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full dark:bg-green-200">Acara</span>
-                            <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">1 hari yang lalu</span>
+                                <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $berita->waktu_relatif }}
+                                </span>
+                            </div>
+
+                            <h5 class="mb-1 font-medium text-gray-800 dark:text-gray-200">{{ $berita->judul }}</h5>
+
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                {{ Str::limit($berita->konten, 120) }}
+                            </p>
                         </div>
-                        <h5 class="mb-1 font-medium text-gray-800 dark:text-gray-200">Pentas Seni Tahunan</h5>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Akan dilaksanakan pada 25 Mei 2024 di aula sekolah...</p>
-                    </div>
+                    @empty
+                        <div class="p-4 text-center text-gray-500 border rounded-lg dark:border-gray-700 dark:text-gray-400">
+                            Tidak ada berita terbaru yang dipublikasikan.
+                        </div>
+                    @endforelse
+
                 </div>
-
                 <div class="mt-4 text-right">
-                    <a href="#" class="text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
+                    <a href="{{ route('admin.berita.index') }}" class="text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
                         Lihat semua berita →
                     </a>
                 </div>

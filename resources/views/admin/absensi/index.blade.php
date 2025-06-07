@@ -32,7 +32,7 @@
                 <option value="">-- Pilih Kelas --</option>
                 @foreach ($kelas as $k)
                     <option value="{{ $k->id }}" {{ request('kelas_id') == $k->id ? 'selected' : '' }}>
-                        {{ $k->nama }}
+                        {{ $k->nama_kelas }}
                     </option>
                 @endforeach
             </select>
@@ -123,7 +123,7 @@
                         {{ $a->siswa->nama ?? '-' }}
                     </td>
                     <td class="px-4 py-3 text-sm border-r border-gray-200 dark:border-gray-700">
-                        {{ $a->kelas->nama ?? '-' }}
+                        {{ $a->kelas->nama_kelas ?? '-' }}
                     </td>
                     <td class="px-4 py-3 text-sm border-r border-gray-200 dark:border-gray-700">
                         {{ \Carbon\Carbon::parse($a->tanggal)->format('d-m-Y') }}
