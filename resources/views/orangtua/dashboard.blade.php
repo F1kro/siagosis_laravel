@@ -1,145 +1,121 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="h4 font-weight-bold">
-            {{ __('Dashboard Orangtua') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
+@section('title', 'Dashboard Orang Tua')
 
-    <div class="row">
-        <div class="mb-4 col-md-12">
-            <div class="card">
-                <div class="bg-white card-header">
-                    <h5 class="mb-0">Daftar Anak</h5>
-                </div>
-                <div class="card-body">
-                    @if($anak->count() > 0)
-                        <div class="row">
-                            @foreach($anak as $a)
-                                <div class="mb-4 col-md-4">
-                                    <div class="card h-100">
-                                        <div class="text-center card-body">
-                                            <div class="mb-3">
-                                                @if($a->siswa->foto)
-                                                    <img src="{{ asset('storage/' . $a->siswa->foto) }}" alt="{{ $a->name }}" class="rounded-circle img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                                @else
-                                                    <div class="mx-auto rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
-                                                        <i class="fas fa-user fa-3x text-secondary"></i>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <h5 class="card-title">{{ $a->name }}</h5>
-                                            <p class="card-text text-muted">
-                                                {{ $a->siswa->kelas->nama_kelas }}
-                                            </p>
-                                            <div class="gap-2 d-grid">
-                                                <a href="{{ route('orangtua.anak.show', $a->siswa->id) }}" class="btn btn-primary">
-                                                    <i class="fas fa-eye me-1"></i> Lihat Detail
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="py-4 text-center">
-                            <i class="mb-3 fas fa-child fa-3x text-muted"></i>
-                            <p>Belum ada data anak yang terdaftar.</p>
-                            <p class="small text-muted">Silakan hubungi pihak sekolah untuk mendaftarkan anak Anda.</p>
-                        </div>
-                    @endif
-                </div>
+@section('content')
+<div class="container grid px-6 mx-auto">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
+        Selamat Datang, {{ $orangtua->nama }}
+    </h2>
+
+    <div class="grid gap-6 mb-8 md:grid-cols-2">
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <div class="flex items-center justify-center p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                <i class="w-5 h-5 fas fa-user-graduate"></i>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Anak Terhubung
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ $siswa->nama }} (Kelas: {{ $siswa->kelas->nama_kelas ?? 'N/A' }})
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <div class="flex items-center justify-center p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+                <i class="w-5 h-5 fas fa-chart-pie"></i>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Total Persentase Kehadiran
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ $persentaseHadir }}%
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="mb-4 col-md-6">
-            <div class="card h-100">
-                <div class="bg-white card-header">
-                    <h5 class="mb-0">Nilai Terbaru</h5>
-                </div>
-                <div class="card-body">
-                    @if($nilaiTerbaru->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Anak</th>
-                                        <th>Mata Pelajaran</th>
-                                        <th>Jenis</th>
-                                        <th>Nilai</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($nilaiTerbaru as $nilai)
-                                        <tr>
-                                            <td>{{ $nilai->tanggal->format('d/m/Y') }}</td>
-                                            <td>{{ $nilai->siswa->user->name }}</td>
-                                            <td>{{ $nilai->mapel->nama }}</td>
-                                            <td>
-                                                <span class="badge bg-{{ $nilai->jenis_nilai == 'tugas' ? 'success' : ($nilai->jenis_nilai == 'ulangan_harian' ? 'info' : ($nilai->jenis_nilai == 'uts' ? 'warning' : 'danger')) }}">
-                                                    {{ ucfirst(str_replace('_', ' ', $nilai->jenis_nilai)) }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $nilai->nilai }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <div class="py-4 text-center">
-                            <i class="mb-3 fas fa-star fa-3x text-muted"></i>
-                            <p>Belum ada nilai terbaru.</p>
-                        </div>
-                    @endif
-                </div>
+    <div class="grid gap-6 mb-8 lg:grid-cols-2">
+        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <h3 class="p-4 text-lg font-semibold text-gray-700 bg-white border-b dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <i class="mr-2 fas fa-calendar-check"></i> Absensi Ananda Hari Ini
+            </h3>
+            <div class="p-4 bg-white dark:bg-gray-800">
+                <ul class="space-y-3">
+                    @forelse ($absensiHariIni as $absen)
+                        <li class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="mr-3 font-mono text-sm text-gray-500 dark:text-gray-400">{{ $absen->waktu ? \Carbon\Carbon::parse($absen->waktu)->format('H:i') : '' }}</span>
+                                <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $absen->mapel->nama ?? 'N/A' }}</span>
+                            </div>
+                            @if(strtolower($absen->status) == 'hadir')
+                                <span class="px-2 py-1 text-xs font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Hadir</span>
+                            @elseif(strtolower($absen->status) == 'sakit')
+                                <span class="px-2 py-1 text-xs font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">Sakit</span>
+                            @elseif(strtolower($absen->status) == 'izin')
+                                <span class="px-2 py-1 text-xs font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-white dark:bg-blue-600">Izin</span>
+                            @else
+                                <span class="px-2 py-1 text-xs font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">Alpa</span>
+                            @endif
+                        </li>
+                    @empty
+                        <li class="text-center text-gray-500">Belum ada data absensi untuk hari ini.</li>
+                    @endforelse
+                </ul>
             </div>
         </div>
 
-        <div class="mb-4 col-md-6">
-            <div class="card h-100">
-                <div class="bg-white card-header">
-                    <h5 class="mb-0">Kehadiran Terbaru</h5>
-                </div>
-                <div class="card-body">
-                    @if($kehadiranTerbaru->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Anak</th>
-                                        <th>Status</th>
-                                        <th>Keterangan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($kehadiranTerbaru as $kehadiran)
-                                        <tr>
-                                            <td>{{ $kehadiran->tanggal->format('d/m/Y') }}</td>
-                                            <td>{{ $kehadiran->siswa->user->name }}</td>
-                                            <td>
-                                                <span class="badge bg-{{ $kehadiran->status == 'hadir' ? 'success' : ($kehadiran->status == 'izin' ? 'info' : ($kehadiran->status == 'sakit' ? 'warning' : 'danger')) }}">
-                                                    {{ ucfirst($kehadiran->status) }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $kehadiran->keterangan ?? '-' }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <div class="py-4 text-center">
-                            <i class="mb-3 fas fa-clipboard-check fa-3x text-muted"></i>
-                            <p>Belum ada data kehadiran terbaru.</p>
-                        </div>
-                    @endif
-                </div>
+        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <h3 class="p-4 text-lg font-semibold text-gray-700 bg-white border-b dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <i class="mr-2 fas fa-star"></i> 5 Nilai Terbaru Ananda
+            </h3>
+            <div class="w-full overflow-x-auto">
+                <table class="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">Mata Pelajaran</th>
+                            <th class="px-4 py-3">Jenis Nilai</th>
+                            <th class="px-4 py-3 text-center">Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                         @forelse ($nilaiTerbaru as $nilai)
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm font-semibold">{{ $nilai->mapel->nama ?? 'N/A' }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $nilai->jenis_nilai }}</td>
+                            <td class="px-4 py-3 text-lg font-semibold text-center">
+                                <span class="px-3 py-1 rounded-full {{ $nilai->nilai >= 75 ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100' : 'text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700' }}">
+                                    {{ $nilai->nilai }}
+                                </span>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="px-4 py-10 text-center text-gray-500">Belum ada nilai yang diinput.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-</x-app-layout>
+    <div class="w-full mb-6 overflow-hidden rounded-lg shadow-xs">
+        <h3 class="p-4 text-lg font-semibold text-gray-700 bg-white border-b dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+           <i class="mr-2 fas fa-newspaper"></i> Berita & Info Sekolah
+       </h3>
+       <div class="p-4 bg-white dark:bg-gray-800">
+           <div class="space-y-4">
+               @forelse ($beritaTerbaru as $berita)
+                   <div class="pb-2 border-b dark:border-gray-700">
+                       <p class="mb-1 font-semibold text-gray-800 dark:text-gray-200">{{ $berita->judul }}</p>
+                       <p class="text-xs text-gray-500 dark:text-gray-400">{{ $berita->waktu_relatif }}</p>
+                   </div>
+               @empty
+                   <div class="text-center text-gray-500">Tidak ada berita terbaru.</div>
+               @endforelse
+           </div>
+       </div>
+   </div>
+</div>
+@endsection

@@ -18,7 +18,9 @@ use App\Http\Controllers\Guru\AbsensiController as GuruAbsensiController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\Guru\NilaiController as GuruNilaiController;
 use App\Http\Controllers\Orangtua\AnakController;
+use App\Http\Controllers\Orangtua\BeritaController as OrangtuaBeritaController;
 use App\Http\Controllers\Orangtua\DashboardController as OrangtuaDashboardController;
+use App\Http\Controllers\Orangtua\AbsensiController as OrangtuaAbsensiController;
 use App\Http\Controllers\Orangtua\NilaiController as OrangtuaNilaiController;
 use App\Http\Controllers\Siswa\BeritaController as SiswaBeritaController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
@@ -241,15 +243,12 @@ Route::middleware(['auth', EnsureUserHasRole::class.':orangtua'])->prefix('orang
 
     // Nilai
     Route::get('nilai', [OrangtuaNilaiController::class, 'index'])->name('nilai.index');
-    Route::get('nilai/{siswa}', [OrangtuaNilaiController::class, 'show'])->name('nilai.show');
 
     // Absensi
-    // Route::get('absensi', [OrangtuaAbsensiController::class, 'index'])->name('absensi.index');
-    // Route::get('absensi/{siswa}', [OrangtuaAbsensiController::class, 'show'])->name('absensi.show');
+    Route::get('absensi', [OrangtuaAbsensiController::class, 'index'])->name('absensi.index');
 
     // Berita
-    // Route::get('berita', [OrangtuaBeritaController::class, 'index'])->name('berita.index');
-    // Route::get('berita/{berita}', [OrangtuaBeritaController::class, 'show'])->name('berita.show');
+    Route::resource('berita', OrangtuaBeritaController::class)->only(['index', 'show']);
 });
 
 // profile route
