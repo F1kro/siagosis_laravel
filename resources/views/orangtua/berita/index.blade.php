@@ -2,7 +2,6 @@
 
 @section('title', 'ORANGTUA | BERITA')
 
-
 @section('content')
 <main class="h-full overflow-y-auto">
     <div class="container px-6 py-8 mx-auto">
