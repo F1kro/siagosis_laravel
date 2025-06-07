@@ -6,12 +6,9 @@
 @section('content')
 <main class="h-full overflow-y-auto">
     <div class="container px-6 py-8 mx-auto">
-        {{-- BAGIAN BARU: SAPAAN SELAMAT DATANG --}}
         <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
             Selamat Datang🎓, {{ $name }}
         </h2>
-
-        {{-- BAGIAN BARU: BREADCRUMBS --}}
         <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900">
             <p class="text-sm text-gray-600 dark:text-gray-400">
                 <a href="{{ route('guru.dashboard') }}" class="hover:underline">Dashboard</a>
@@ -20,7 +17,6 @@
             </p>
         </div>
 
-        {{-- KONTEN LAMA (TIDAK BERUBAH) --}}
         <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-3">
             @forelse ($beritas as $berita)
                 <div class="flex flex-col justify-between p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">

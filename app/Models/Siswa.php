@@ -51,6 +51,6 @@ class Siswa extends Model
 
     public function todoList()
     {
-        return $this->hasMany(TodoList::class);
+        return $this->hasMany(TodoList::class, 'siswa_id');
     }
 }

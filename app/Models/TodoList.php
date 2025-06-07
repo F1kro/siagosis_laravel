@@ -13,11 +13,19 @@ class TodoList extends Model
 
     protected $fillable = [
         'siswa_id',
+        'mapel_id',
         'judul',
         'deskripsi',
         'deadline',
-        'mapel_id',
         'selesai',
+      ];
+
+    /**
+     * Casts disesuaikan untuk 'deadline' dan 'selesai'.
+     */
+    protected $casts = [
+        'deadline' => 'date',
+        'selesai' => 'boolean', 
     ];
 
     public function siswa()

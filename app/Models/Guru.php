@@ -41,8 +41,6 @@ class Guru extends Model
             ->withTimestamps();
     }
 
-    
-
     public function jadwal()
     {
         return $this->hasMany(Jadwal::class);
@@ -54,7 +52,12 @@ class Guru extends Model
     }
 
     public function guruMapel()
-{
-    return $this->hasMany(GuruMapel::class);
-}
+    {
+        return $this->hasMany(GuruMapel::class);
+    }
+
+    public function kelasWali()
+    {
+        return $this->hasMany(Kelas::class, 'guru_id');
+    }
 }

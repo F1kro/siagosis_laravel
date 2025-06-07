@@ -1,150 +1,201 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container grid px-6 mx-auto">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
-            Selamat Datang,{{ $guru->jenis_kelamin === "Laki-laki" ? " Pak " : "Bu " }} {{ $name }} 🎉🎉
-        </h2>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <p class="text-sm font-bold text-gray-600 dark:text-gray-400">
-                Mari kita bangun SDM Indonesia lebih unggul dengan SIAGOSIS (Sistem Informasi Akademik Guru,Siswa,OrangTua)
-                🔥🔥
-            </p>
-        </div>
+<div class="container grid px-6 mx-auto">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
+        Selamat Datang, {{ $siswa->nama }} 🎉
+    </h2>
 
-        <!-- Cards -->
-        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Data Guru
-        </h2>
-        <div class="grid gap-6 mb-4 md:grid-cols-2 xl:grid-cols-4">
-            <!-- Card: Total Siswa yang Diajar -->
-            <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Total Siswa yang Diajar
-                    </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{ $totalSiswa }}
-                    </p>
-                </div>
+    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <div class="flex items-center justify-center p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+                <i class=" fas fa-check-circle"></i>
             </div>
-
-            <!-- Card: Total Kelas yang Diajar -->
-            <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z">
-                        </path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Total Kelas yang Diajar
-                    </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{-- {{ $totalKelas }} --}}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Card: Total Mata Pelajaran -->
-            <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Total Mata Pelajaran
-                    </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{ $totalMapel }}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Card: Jadwal Mengajar -->
-            <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <div class="p-3 mr-4 text-purple-500 bg-purple-100 rounded-full dark:text-purple-100 dark:bg-purple-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M8 7V3m8 4V3m-9 8h10m-11 4h12M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Jadwal Mengajar Hari Ini
-                    </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{-- {{ $jadwalHariIni ?? 'Tidak ada jadwal hari ini' }} --}}
-                    </p>
-                </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Kehadiran
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ $persentase['hadir'] }}%
+                    <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                        (dari {{ $totalAbsensi }} hari)
+                    </span>
+                </p>
             </div>
         </div>
-
-        <!-- Info Sekolah -->
-        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Info Sekolah & Berita Terbaru
-        </h2>
-
-        <div class="grid gap-6 mb-8 md:grid-cols-2">
-            <!-- Info Sekolah -->
-            <div class="min-w-0 p-6 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <h3 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Info Sekolah</h3>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="col-span-1 font-medium text-gray-600 dark:text-gray-400">Nama: SMK NEGERI 1 LOPOK</div>
-                        <div class="col-span-1 font-medium text-gray-600 dark:text-gray-400">Letak: Jl. Pendidikan No. 1,
-                            Jakarta Pusat</div>
-                        <div class="col-span-1 font-medium text-gray-600 dark:text-gray-400">Akreditasi: A (Unggul)</div>
-                        <div class="col-span-1 font-medium text-gray-600 dark:text-gray-400">Kepala Sekolah: Dr. Surya
-                            Wijaya, M.Pd</div>
-                        <div class="col-span-1 font-medium text-gray-600 dark:text-gray-400">Telp: (021) 12345678</div>
-                        <div class="col-span-1 font-medium text-gray-600 dark:text-gray-400">Email: info@sman1-jkt.sch.id
-                        </div>
-                    </div>
-                </div>
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <div class="flex items-center justify-center p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+                <i class="w-4 fas fa-band-aid"></i>
             </div>
-
-            <!-- Berita Terbaru -->
-            <div class="min-w-0 p-6 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <h3 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Berita Terbaru</h3>
-                <div class="space-y-4">
-                    @foreach ($recentBerita as $berita)
-                        <div class="p-4 border rounded-lg dark:border-gray-700">
-                            <div class="flex items-center mb-2">
-                                <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full dark:bg-blue-200">
-                                    {{ $berita->kategori }}
-                                </span>
-                                <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $berita->created_at->diffForHumans() }}
-                                </span>
-                            </div>
-                            <h5 class="mb-1 font-medium text-gray-800 dark:text-gray-200">{{ $berita->judul }}</h5>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ Str::limit($berita->isi, 100) }}</p>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="mt-4 text-right">
-                    <a href="#"
-                       class="text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
-                        Lihat semua berita →
-                    </a>
-                </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Sakit
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                     {{ $persentase['sakit'] }}%
+                    <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                        (dari {{ $totalAbsensi }} hari)
+                    </span>
+                </p>
             </div>
         </div>
-
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <div class="flex items-center justify-center p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                <i class="w-4 fas fa-file-alt"></i>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Izin
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                     {{ $persentase['izin'] }}%
+                     <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                        (dari {{ $totalAbsensi }} hari)
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center p-4 rounded-lg shadow-xs dark:bg-gray-800">
+            <div class="flex items-center justify-center p-3 mr-4 text-red-500 bg-red-100 rounded-full dark:bg-red-500">
+                <i class=" fas fa-heart-crack dark:text-black"></i>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Alpa
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                     {{ $persentase['alpa'] }}%
+                     <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                        (dari {{ $totalAbsensi }} hari)
+                    </span>
+                </p>
+            </div>
+        </div>
     </div>
+
+    <div class="grid gap-6 mb-8 md:grid-cols-2">
+        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <h3 class="p-4 text-lg font-semibold text-gray-700 bg-white border-b dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                Jadwal Pelajaran Hari Ini
+            </h3>
+            <div class="w-full overflow-x-auto bg-white dark:bg-gray-800">
+                <table class="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">Jam</th>
+                            <th class="px-4 py-3">Mata Pelajaran</th>
+                            <th class="px-4 py-3">Guru</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                        @forelse ($jadwalHariIni as $jadwal)
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm">
+                                {{ date('H:i', strtotime($jadwal->jam_mulai)) }} - {{ date('H:i', strtotime($jadwal->jam_selesai)) }}
+                            </td>
+                            <td class="px-4 py-3 text-sm font-semibold">
+                                {{ $jadwal->mapel->nama ?? 'N/A' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $jadwal->guru->nama ?? 'N/A' }}
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="px-4 py-3 text-center">Tidak ada jadwal pelajaran hari ini.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+             <h3 class="p-4 text-lg font-semibold text-gray-700 bg-white border-b dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                Nilai Terbaru
+            </h3>
+            <div class="w-full overflow-x-auto bg-white dark:bg-gray-800">
+                <table class="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">Mata Pelajaran</th>
+                            <th class="px-4 py-3">Jenis Ujian</th>
+                            <th class="px-4 py-3">Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                         @forelse ($nilaiTerbaru as $nilai)
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm font-semibold">
+                                {{ $nilai->mapel->nama ?? 'N/A' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $nilai->jenis_ujian }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                    {{ $nilai->nilai }}
+                                </span>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="px-4 py-3 text-center dark:text-gray-300">Belum ada nilai yang diinput.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+        <h3 class="p-4 text-lg font-semibold text-gray-700 bg-white border-b dark:text-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            Tugas / To-Do List Terbaru
+        </h3>
+        <div class="p-4 bg-white dark:bg-gray-800">
+            <ul class="space-y-2">
+                @forelse ($todoList as $todo)
+                    <li>
+                        <a href="{{ route('siswa.todolist.index') }}" class="flex items-start p-4 transition-colors duration-150 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 dark:border-gray-700">
+                            <div class="flex items-center h-5 mt-1">
+                                @if ($todo->selesai)
+                                    <i class="w-5 h-5 text-green-500 fas fa-check-circle"></i>
+                                @else
+                                    <i class="w-5 h-5 text-purple-600 fas fa-circle"></i>
+                                @endif
+                            </div>
+                            <div class="w-full ml-3 text-sm">
+                                <div class="flex items-center justify-between">
+                                     <h4 class="font-semibold {{ $todo->selesai ? 'text-gray-500 line-through dark:text-gray-400' : 'text-gray-800 dark:text-gray-200' }}">
+                                        {{ $todo->judul ?? 'Judul Tugas' }}
+                                    </h4>
+                                    <span class="px-2 py-1 text-xs font-medium leading-none text-purple-600 bg-purple-100 rounded-full dark:text-purple-100 dark:bg-purple-600">
+                                        {{ $todo->mapel->nama ?? 'Umum' }}
+                                    </span>
+                                </div>
+
+                                <p class="mt-1 text-gray-600 dark:text-gray-400 {{ $todo->selesai ? 'line-through' : '' }}">
+                                    {{ Str::limit($todo->deskripsi ?? $todo->tugas, 150) }}
+                                </p>
+
+                                <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <span>Dibuat: {{ $todo->created_at->format('d M Y') }}</span>
+                                    @if($todo->deadline)
+                                        <span class="mx-1">·</span>
+                                        <span>Deadline: <span class="font-medium text-red-500">{{ \Carbon\Carbon::parse($todo->deadline)->format('d M Y') }}</span></span>
+                                    @endif
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                @empty
+                    <li class="py-4 text-center text-gray-500 dark:text-gray-400">
+                        Tidak ada tugas saat ini. Selamat!
+                    </li>
+                @endforelse
+            </ul>
+        </div>
+    </div>
+</div>
 @endsection
