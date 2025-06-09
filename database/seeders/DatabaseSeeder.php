@@ -9,10 +9,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            // GuruSeeder::class,
+            // SiswaSeeder::class, // <== Gaperlu, karena sudah dijalankan oleh UserSeeder
             UserSeeder::class,
-            GuruSeeder::class,
             KelasSeeder::class,
-            SiswaSeeder::class,
             OrangtuaSeeder::class,
             MapelSeeder::class,
             GuruMapelSeeder::class,

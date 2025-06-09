@@ -1,0 +1,117 @@
+[33mcommit 5e4f1e838ada98ec9b325677d7208bc116fa3fdb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev-hamzan[m[33m, [m[1;31morigin/dev-hamzan[m[33m)[m
+Author: Void Panda <hamzankechil@gmail.com>
+Date:   Mon Jun 9 23:45:50 2025 +0800
+
+    [Fix]: Seeder when a related user deleted
+
+[33mcommit cae80076dbe13973304951b0c7c12d6b9940ad04[m
+Author: Void Panda <hamzankechil@gmail.com>
+Date:   Mon Jun 9 11:57:40 2025 +0800
+
+    [Fix]: Bug refused to access SiswaDashboard, Display Master Data (siswa, guru, ortu) that inserted via Seeder
+
+[33mcommit 23033cfbab84d19752eb18ec47526570d0f1e396[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Fiqro Najiah <mstok0369@gmail.com>
+Date:   Mon Jun 9 00:29:27 2025 +0800
+
+    Delete .env_prod
+
+[33mcommit 39b42a0674b042c6f857602cb5b9286a25c5d3f1[m
+Merge: 85286fa 828dc48
+Author: F1kro <mstok0369@gmail.com>
+Date:   Mon Jun 9 00:09:37 2025 +0800
+
+    remove .env_prod
+
+[33mcommit 85286fa8b4ac8dcfbf4460c3589d26647234ffbc[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Mon Jun 9 00:05:54 2025 +0800
+
+    remove .env_prod
+
+[33mcommit 828dc4820134914f8cc33030428d2bc6a7fe27bf[m
+Merge: ce4849b b4b31d0
+Author: Fiqro Najiah <mstok0369@gmail.com>
+Date:   Sun Jun 8 23:58:59 2025 +0800
+
+    Merge pull request #1 from F1kro/backup
+    
+    backup 90 % + sql file
+
+[33mcommit b4b31d0f7a4c8cd15855297a0b1e14c425eb0bad[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sun Jun 8 23:53:27 2025 +0800
+
+    backup 90 % + sql file
+
+[33mcommit ce4849b02c2748c6d944718953f291288fc66ca9[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sun Jun 8 02:28:15 2025 +0800
+
+    remove env_local
+
+[33mcommit 0d876fbb47615a0cee97090c250e395f28087e86[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sun Jun 8 02:27:11 2025 +0800
+
+    add nixpacks
+
+[33mcommit 13c76958fe04b6c1731f20f647cbcda021f05339[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sun Jun 8 01:38:05 2025 +0800
+
+    sisa laporan , chat , dan notifikasi
+
+[33mcommit 95fc5c65e38ddbac8dd2824884624e433d8fdc87[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sun Jun 8 00:40:37 2025 +0800
+
+    90%
+
+[33mcommit 3ab7864167b5ad464885df6e29621889244c4967[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sat Jun 7 23:27:19 2025 +0800
+
+    fix sidebar , fix siswa
+
+[33mcommit 25e93ffa71aca70a5490c5ec8e1bc0df2a212a92[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sat Jun 7 23:03:57 2025 +0800
+
+    siswa selesai
+
+[33mcommit 65808df76f22e9af7e049b835b0709fff59f9d4b[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Sat Jun 7 21:42:22 2025 +0800
+
+    dashboard siswa & todolist , 80%
+
+[33mcommit 7c7973a37032b22dcbe062668b7bd495f0176ca2[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Fri Jun 6 17:59:02 2025 +0800
+
+    fixing guru berita , dan menu lain
+
+[33mcommit 6996d9ae14bcf66781d0998486642bb1ef544850[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Mon May 26 18:42:46 2025 +0800
+
+    fix absensi & nilai
+
+[33mcommit e2e0307815a198d3d13de92a418213472ead9224[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Mon May 26 05:21:29 2025 +0800
+
+    70
+
+[33mcommit 4f3c97b49dcf4570086fa7abe762aca081c8780f[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Wed May 21 02:02:42 2025 +0800
+
+    admin 80%
+
+[33mcommit 83fa50f9fe2c4a0e3278cf959298d5c85842a241[m
+Author: F1kro <mstok0369@gmail.com>
+Date:   Mon May 19 12:31:45 2025 +0800
+
+    siagosis-with template : Full update | ongoing

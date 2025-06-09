@@ -16,7 +16,7 @@ class OrangtuaFactory extends Factory
             'alamat' => $this->faker->address,
             'pekerjaan' => $this->faker->randomElement(['PNS', 'Wiraswasta', 'Guru', 'Dokter', 'Petani']),
             'siswa_id' => Siswa::inRandomOrder()->first()?->id ?? 1,
-            'user_id' => User::where('role', 'orangtua')->inRandomOrder()->first()?->id ?? 4,
+            'user_id' => User::factory(),
         ];
     }
 }

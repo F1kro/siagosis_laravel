@@ -10,7 +10,7 @@ class GuruFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->create(['role' => 'guru'])->id,
+            'user_id' => null, // karena udah otomatis dari UserSeeder
             'nip' => $this->faker->unique()->numerify('1980####'),
             'nama' => $this->faker->name,
             'telepon' => $this->faker->phoneNumber,

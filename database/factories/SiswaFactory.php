@@ -13,14 +13,14 @@ class SiswaFactory extends Factory
         return [
             'nisn' => $this->faker->unique()->numerify('############'),
             'nama' => $this->faker->name,
-            'kelas_id' => Kelas::inRandomOrder()->first()->id ?? 1, // fallback to ID 1
+            'kelas_id' => null,
             'jenis_kelamin' => $this->faker->randomElement(['Laki-laki', 'Perempuan']),
             'alamat' => $this->faker->address,
             'tanggal_lahir' => $this->faker->date('Y-m-d', '-10 years'),
             'tempat_lahir' => $this->faker->city,
             'agama' => $this->faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha']),
             'foto' => null,
-            'user_id' => User::where('role', 'siswa')->first()->id,
+            'user_id' => null,
         ];
     }
 }

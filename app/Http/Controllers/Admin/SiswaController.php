@@ -226,6 +226,7 @@ class SiswaController extends Controller
             return redirect()->route('admin.siswa.index')->with('error', 'Data Siswa tidak ditemukan.');
         }
 
+        $siswa->user()->delete();
         $siswa->delete();
 
         return redirect()->route('admin.siswa.index')

@@ -197,6 +197,7 @@ class GuruController extends Controller
             return redirect()->route('admin.guru.index')->with('error', 'Data guru tidak ditemukan.');
         }
 
+        $guru->user()->delete();
         $guru->delete();
 
         return redirect()->route('admin.guru.index')

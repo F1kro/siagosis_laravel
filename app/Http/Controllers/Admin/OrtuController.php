@@ -120,6 +120,7 @@ class OrtuController extends Controller
             return redirect()->route('admin.ortu.index')->with('error', 'Data Orang Tua tidak ditemukan.');
         }
 
+        $orangtua->user()->delete();
         $orangtua->delete();
 
         return redirect()->route('admin.ortu.index')
