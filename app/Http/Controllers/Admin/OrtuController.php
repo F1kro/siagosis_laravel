@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Orangtua;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class OrtuController extends Controller
 
         $name = Auth::user()->name;
         $siswa = Siswa::all();
-        $orangtua = $query->paginate(10);
+        $orangtua = Orangtua::orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.ortu.index', compact('orangtua', 'name', 'siswa'));
     }
@@ -69,26 +70,34 @@ class OrtuController extends Controller
     public function edit($id)
     {
         $siswa = Siswa::all();
-        $orangtua = User::with('orangtua')->findOrFail($id);
-
+        // $orangtua = User::with('orangtua')->findOrFail($id);
+        $orangtua = Orangtua::where('id', $id)->first();
+        if (!$orangtua) {
+            return back()->with('error', 'Data orang tua tidak ditemukan.');
+        }
         return view('admin.ortu.edit', compact('orangtua', 'siswa'));
     }
 
     public function update(Request $request, $id)
     {
-        $orangtua = User::with('orangtua')->findOrFail($id);
+        // $orangtua = User::with('orangtua')->findOrFail($id);
+        $orangtua = Orangtua::where('id', $id)->first();
+
+        if (!$orangtua) {
+            return redirect()->route('admin.ortu.index')->with('error', 'Data orang tua tidak ditemukan.');
+        }
 
         $request->validate([
             'nama' => 'required|string|max:225',
             'pekerjaan' => 'required|string|max:225',
-            'telepon' => 'required|string|max:15|unique:orangtua,telepon,'.$orangtua->orangtua->id,
+            'telepon' => 'required|string|max:15|unique:orangtua,telepon,'.$orangtua->id,
             'alamat' => 'required|string|max:225',
             'siswa_id' => 'required|exists:siswa,id',
         ]);
 
         $orangtua->update(['name' => $request->nama]);
 
-        $orangtua->orangtua()->update([
+        $orangtua->update([
             'nama' => $request->nama,
             'telepon' => $request->telepon,
             'pekerjaan' => $request->pekerjaan,
@@ -102,10 +111,13 @@ class OrtuController extends Controller
 
     public function destroy($id)
     {
-        $orangtua = User::with('orangtua')->findOrFail($id);
+        // $orangtua = User::with('orangtua')->findOrFail($id);
+        $orangtua = Orangtua::where('id', $id)->first();
 
-        if ($orangtua->orangtua) {
-            $orangtua->orangtua->delete();
+
+        if (!$orangtua) {
+            // $orangtua->delete();
+            return redirect()->route('admin.ortu.index')->with('error', 'Data Orang Tua tidak ditemukan.');
         }
 
         $orangtua->delete();

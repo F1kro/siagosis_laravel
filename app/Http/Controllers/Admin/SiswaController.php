@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Routing\Controller;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -43,10 +44,9 @@ class SiswaController extends Controller
                 });
             }
 
-            $siswa = $query->paginate(7);
+            $siswa = Siswa::orderBy('created_at', 'desc')->paginate(7);
             $kelas = Kelas::all();
             $name = Auth::user()->name;
-
             return view('admin.siswa.index', compact('siswa', 'kelas','name'));
         }
     // }
@@ -136,7 +136,11 @@ class SiswaController extends Controller
     public function edit($id)
 {
     $kelas = Kelas::all();
-    $siswa = User::with('siswa')->findOrFail($id);
+    // $siswa = User::with('siswa')->findOrFail($id);
+    $siswa = Siswa::where('id', $id)->first();
+    if (!$siswa) {
+        return back()->with('error', 'Data siswa tidak ditemukan.');
+    }
 
     return view('admin.siswa.edit', compact('kelas', 'siswa'));
 }
@@ -150,11 +154,12 @@ class SiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $siswa = User::with('siswa')->findOrFail($id);
+        // $siswa = User::with('siswa')->findOrFail($id);
+        $siswa = Siswa::where('id', $id)->first();
 
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nisn' => 'required|string|max:20|unique:siswa,nisn,' . $siswa->siswa->id,
+            'nisn' => 'required|string|max:20|unique:siswa,nisn,' . $siswa->id,
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
@@ -172,19 +177,19 @@ class SiswaController extends Controller
         // Handle file upload
         if ($request->hasFile('foto')) {
             // Delete old file if exists
-            if ($siswa->siswa->foto) {
-                Storage::disk('public')->delete($siswa->siswa->foto);
+            if ($siswa->foto) {
+                Storage::disk('public')->delete($siswa->foto);
             }
 
             $fotoPath = $request->file('foto')->store('siswa', 'public');
 
-            $siswa->siswa->update([
+            $siswa->update([
                 'foto' => $fotoPath,
             ]);
         }
 
         // Update siswa profile
-        $siswa->siswa->update([
+        $siswa->update([
             'nisn' => $request->nisn,
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -207,16 +212,18 @@ class SiswaController extends Controller
      */
     public function destroy($id)
     {
-        $siswa = User::where('role', 'siswa')->findOrFail($id);
+        // $siswa = User::where('role', 'siswa')->findOrFail($id);
+        $siswa = Siswa::where('id', $id)->first();
 
         // Delete foto if exists
-        if ($siswa->siswa && $siswa->siswa->foto) {
-            Storage::disk('public')->delete($siswa->siswa->foto);
+        if ($siswa && $siswa->foto) {
+            Storage::disk('public')->delete($siswa->foto);
         }
 
         // Delete siswa profile and user
-        if ($siswa->siswa) {
-            $siswa->siswa->delete();
+        if (!$siswa) {
+            // $siswa->delete();
+            return redirect()->route('admin.siswa.index')->with('error', 'Data Siswa tidak ditemukan.');
         }
 
         $siswa->delete();

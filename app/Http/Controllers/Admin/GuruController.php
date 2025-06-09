@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -34,7 +35,7 @@ class GuruController extends Controller
         }
 
         $name = Auth::user()->name;
-        $guru = $query->paginate(10);
+        $guru = Guru::orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.guru.index', compact('guru', 'name'));
     }
@@ -105,7 +106,11 @@ class GuruController extends Controller
      */
     public function edit($id)
     {
-        $guru = User::with('guru')->findOrFail($id);
+        // $guru = User::with('guru')->findOrFail($id);
+        $guru = Guru::where('id', $id)->first();
+        if (!$guru) {
+            return back()->with('error', 'Data guru tidak ditemukan.');
+        }
 
         return view('admin.guru.edit', compact('guru'));
     }
@@ -119,7 +124,11 @@ class GuruController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $guru = User::with('guru')->findOrFail($id);
+        // $guru = User::with('guru')->findOrFail($id);
+        $guru = Guru::where('id', $id)->first();
+        if (!$guru) {
+            return redirect()->route('admin.guru.index')->with('error', 'Data guru tidak ditemukan.');
+        }
 
         $request->validate([
             'nip' => 'required|string|max:16',
@@ -140,19 +149,19 @@ class GuruController extends Controller
         // Handle file upload
         if ($request->hasFile('foto')) {
             // Delete old file if exists
-            if ($guru->guru->foto) {
-                Storage::disk('public')->delete($guru->guru->foto);
+            if ($guru->foto) {
+                Storage::disk('public')->delete($guru->foto);
             }
 
             $fotoPath = $request->file('foto')->store('guru', 'public');
 
-            $guru->guru->update([
+            $guru->update([
                 'foto' => $fotoPath,
             ]);
         }
 
         // Update guru profile
-        $guru->guru->update([
+        $guru->update([
             'nip' => $request->nip,
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -174,16 +183,18 @@ class GuruController extends Controller
      */
     public function destroy($id)
     {
-        $guru = User::with('guru')->findOrFail($id);
+        // $guru = User::with('guru')->findOrFail($id);
+        $guru = Guru::where('id', $id)->first();
 
         // Delete foto if exists
-        if ($guru->guru && $guru->guru->foto) {
-            Storage::disk('public')->delete($guru->guru->foto);
+        if ($guru && $guru->foto) {
+            Storage::disk('public')->delete($guru->foto);
         }
 
         // Delete guru profile and user
-        if ($guru->guru) {
-            $guru->guru->delete();
+        if (!$guru) {
+            // $guru->delete();
+            return redirect()->route('admin.guru.index')->with('error', 'Data guru tidak ditemukan.');
         }
 
         $guru->delete();

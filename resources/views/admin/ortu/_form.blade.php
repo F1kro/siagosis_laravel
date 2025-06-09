@@ -1,5 +1,5 @@
 @php
-    $data = optional(optional($orangtua)->orangtua);
+    $data = (optional($orangtua));
 @endphp
 
 <div class="container grid px-6 mx-auto">

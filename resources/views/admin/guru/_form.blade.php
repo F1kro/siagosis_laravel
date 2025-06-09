@@ -1,5 +1,5 @@
 @php
-    $data = optional(optional($guru)->guru);
+    $data = (optional($guru));
 @endphp
 
 <div class="container grid px-6 mx-auto">

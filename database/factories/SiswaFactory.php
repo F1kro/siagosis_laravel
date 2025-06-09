@@ -20,7 +20,7 @@ class SiswaFactory extends Factory
             'tempat_lahir' => $this->faker->city,
             'agama' => $this->faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha']),
             'foto' => null,
-            'user_id' => User::factory()->create(['role' => 'siswa'])->id,
+            'user_id' => User::where('role', 'siswa')->first()->id,
         ];
     }
 }
