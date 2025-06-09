@@ -1,6 +1,6 @@
 <ul>
     <li class="relative px-6 py-3" x-data="{ isPagesMenuOpen: {{ $isSubMenuOpen['master'] ? 'true' : 'false' }} }">
-        {{-- TAMBAHKAN SPAN UNTUK GARIS UNGU AKTIF DI SINI --}}
+
         <span
             class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ $isSubMenuOpen['master'] ? 'bg-purple-600' : '' }}"
             aria-hidden="true"></span>
@@ -77,15 +77,19 @@
     <li class="relative px-6 py-3"><span
             class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/laporan*') ? 'bg-purple-600' : '' }}"></span><a
             class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/laporan*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
-            href="{{ route('admin.laporan.index') }}"><i class="w-5 h-5 fas fa-file-alt"></i><span class="ml-4">Master Laporan</span></a></li>
+            href="{{ route('admin.laporan.index') }}"><i class="w-5 h-5 fas fa-file-alt"></i><span
+                class="ml-4">Master Laporan</span></a></li>
     <li class="relative px-6 py-3"><span
             class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/ranking*') ? 'bg-purple-600' : '' }}"></span><a
             class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/ranking*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
             href="{{ route('admin.ranking.index') }}"><i class="w-5 h-5 fas fa-ranking-star"></i><span
                 class="ml-4">Master Ranking</span></a></li>
-    <li class="relative px-6 py-3"><span
-            class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/berita*') ? 'bg-purple-600' : '' }}"></span><a
-            class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/berita*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
-            href="{{ route('admin.berita.index') }}"><i class="w-5 h-5 fas fa-newspaper"></i><span
-                class="ml-4">Master Berita</span></a></li>
+    <li class="relative px-6 py-3">
+        <span class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/berita*') ? 'bg-purple-600' : '' }}">
+        </span>
+        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/berita*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
+            href="{{ route('admin.berita.index') }}"><i class="w-5 h-5 fas fa-newspaper"></i>
+            <span class="ml-4">Master Berita</span>
+        </a>
+    </li>
 </ul>

@@ -3,41 +3,60 @@
 @section('title', 'Detail Berita')
 
 @section('content')
-    <div class="w-full overflow-hidden rounded-lg">
+<main class="h-full overflow-y-auto">
+    <div class="container px-6 py-8 mx-auto">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
+            Portal berita & Informasi Sekolah
+        </h2>
 
-        <div class="mb-6">
+        <div class="px-2 py-2 mb-6 rounded-lg dark:bg-gray-800">
             <a href="{{ route('admin.berita.index') }}"
-                class="inline-block px-4 py-2 text-sm text-white bg-gray-600 rounded hover:bg-gray-700">
-                ← Kembali ke daftar berita
+               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-lg hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Daftar Berita
             </a>
         </div>
 
-        <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            @if ($berita->foto)
-                <img src="{{ asset('storage/' . $berita->foto) }}" alt="Foto Berita" class="w-full rounded-lg shadow">
-            @endif
-
-            <h1 class="mb-4 text-3xl font-bold text-gray-800 capitalize dark:text-white">
-                {{ $berita->judul }}
-            </h1>
-
-            <div class="flex items-center justify-between mb-4 text-sm text-gray-500 dark:text-gray-400">
-                <span>Kategori: <strong>{{ $berita->kategori }}</strong></span>
-                <span>Penulis: {{ $berita->user->name ?? '-' }}</span>
-                <span>{{ $berita->created_at->format('d M Y') }}</span>
+        <div class="grid grid-cols-1 gap-8 mb-4 lg:grid-cols-3">
+            <div class="lg:col-span-2">
+                <div class="w-full p-6 bg-white rounded-lg shadow-md md:p-8 dark:bg-gray-800">
+                    <h1 class="text-3xl font-extrabold text-gray-800 dark:text-gray-100">
+                        {{ $berita->judul }}
+                    </h1>
+                    <div class="mt-2 mb-6 text-sm text-gray-500 dark:text-gray-400">
+                        <span>Penulis: {{ $berita->user->name ?? 'Admin Sekolah' }}</span>
+                        <span class="mx-2">•</span>
+                        <span>Diterbitkan pada {{ $berita->created_at->format('d F Y') }}</span>
+                    </div>
+                    @if($berita->foto)
+                        <img class="object-cover w-full h-auto mb-6 rounded-lg max-h-96" src="{{ asset('storage/' . $berita->foto) }}" alt="{{ $berita->judul }}">
+                    @endif
+                    <div class="prose text-gray-700 max-w-none dark:prose-invert dark:text-gray-300">
+                        {!! $berita->konten !!}
+                    </div>
+                </div>
             </div>
 
-            <hr class="my-4 border-gray-300 dark:border-gray-700">
-
-            <article class="prose prose-lg max-w-none dark:prose-invert">
-                {!! $berita->konten !!}
-            </article>
-
-            @if ($berita->status !== 'Dipublikasikan')
-                <div class="p-4 mt-6 text-sm text-yellow-800 bg-yellow-100 rounded dark:bg-yellow-900 dark:text-yellow-300">
-                    <strong>Catatan:</strong> Berita ini belum dipublikasikan.
-                </div>
-            @endif
+            <aside class="space-y-6">
+                @if($beritaTerkait->isNotEmpty())
+                    <div class="p-6 mt-4 mb-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Berita Terkait</h3>
+                        <ul class="mt-4 space-y-4">
+                            @foreach ($beritaTerkait as $terkait)
+                                <li>
+                                    <a href="{{ route('admin.berita.showdetail', $terkait->id) }}" class="block group">
+                                        <h4 class="font-semibold text-purple-600 group-hover:underline dark:text-purple-400">{{ $terkait->judul }}</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $terkait->created_at->format('d M Y') }}</p>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </aside>
         </div>
     </div>
+</main>
 @endsection

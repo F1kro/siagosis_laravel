@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $totalKelas = Kelas::count();
         $totalMapel = Mapel::count();
 
-        $recentBerita = Berita::latest()->where('status', 'Published')->take(5)->get();
+        $recentBerita = Berita::latest()->where('status', 'Published')->take(2)->get();
 
         Carbon::setLocale('id');
         foreach ($recentBerita as $berita) {

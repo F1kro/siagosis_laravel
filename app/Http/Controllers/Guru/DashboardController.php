@@ -43,7 +43,7 @@ class DashboardController extends Controller
 
         $recentBerita = Berita::where('status', 'Published')
             ->latest()
-            ->take(5)
+            ->take(2)
             ->get();
 
         return view('guru.dashboard', compact(
