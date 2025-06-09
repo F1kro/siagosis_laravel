@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\NilaiController;
 use App\Http\Controllers\Admin\OrtuController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\LaporanController as LaporanController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Guru\AbsensiController as GuruAbsensiController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
@@ -126,10 +127,12 @@ Route::middleware(['auth', EnsureUserHasRole::class . ':admin'])->prefix('admin'
         'destroy' => 'guru-mapel.destroy',
     ]);
 
+    // absensi
     Route::resource('absensi', AbsensiController::class)->names([
         'index' => 'absensi.index',
     ])->except(['create', 'store', 'show', 'edit', 'update', 'destroy']);
 
+    // ortu
     Route::resource('ortu', OrtuController::class)->names([
         'index' => 'ortu.index',
         'create' => 'ortu.create',
@@ -140,6 +143,7 @@ Route::middleware(['auth', EnsureUserHasRole::class . ':admin'])->prefix('admin'
         'destroy' => 'ortu.destroy',
     ]);
 
+    // users
     Route::resource('users', UsersController::class)->names([
         'index' => 'users.index',
         'create' => 'users.create',
@@ -150,20 +154,34 @@ Route::middleware(['auth', EnsureUserHasRole::class . ':admin'])->prefix('admin'
         'destroy' => 'users.destroy',
     ]);
 
+    // berita
     Route::patch('berita/{id}/accept', [BeritaController::class, 'accept'])->name('berita.accept');
-
     Route::get('/berita/{id}', [BeritaController::class, 'showdetail'])->name('berita.showdetail');
+    Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('berita.upload');
 
+    // nilai & absensi
     Route::get('nilai/laporan', [NilaiController::class, 'laporan'])->name('nilai.laporan');
-
     Route::get('absensi/laporan', [AbsensiController::class, 'laporan'])->name('absensi.laporan');
 
-    Route::post('/berita/upload', [BeritaController::class, 'upload'])->name('berita.upload');
 
     // ranking
     Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
     Route::post('/ranking', [RankingController::class, 'store'])->name('ranking.store');
     Route::delete('/ranking', [RankingController::class, 'destroy'])->name('ranking.destroy');
+
+    // Laporan
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/', [LaporanController::class, 'index'])->name('index');
+        Route::get('/siswa', [LaporanController::class, 'siswa'])->name('siswa');
+        Route::get('/guru', [LaporanController::class, 'guru'])->name('guru');
+        Route::get('/orangtua', [LaporanController::class, 'orangtua'])->name('orangtua');
+        Route::get('/nilai', [LaporanController::class, 'nilai'])->name('nilai');
+        Route::get('/absensi', [LaporanController::class, 'absensi'])->name('absensi');
+        Route::get('/jadwal', [LaporanController::class, 'jadwal'])->name('jadwal');
+        Route::get('/mapel', [LaporanController::class, 'mapel'])->name('mapel');
+        Route::get('/ranking', [LaporanController::class, 'ranking'])->name('ranking');
+        Route::get('/user', [LaporanController::class, 'user'])->name('user');
+    });
 });
 
 // Guru Routes

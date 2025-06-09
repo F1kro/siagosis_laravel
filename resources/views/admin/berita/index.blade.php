@@ -9,9 +9,35 @@
         </h2>
         <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900">
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                Dashboard >  Berita
+                Dashboard > Berita
             </p>
         </div>
+
+        @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 4000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-200 dark:text-gray-200"
+                role="alert">
+                <span class="font-medium">{{ session('success') }}</span>
+            </div>
+        @endif
+        @if (session('error'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 4000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
+                role="alert">
+                <span class="font-medium">{{ session('error') }}</span>
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert">
+                <p class="font-medium">Harap perbaiki kesalahan di bawah ini:</p>
+                <ul class="mt-1.5 ml-4 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="flex justify-between mb-6">
             <a href="{{ route('admin.berita.create') }}"
@@ -39,7 +65,8 @@
                             <td class="px-4 py-3 text-sm">
                                 {{ $berita->firstItem() + $index }}
                             </td>
-                            <td class="px-4 py-3 text-sm border-r">{{ \Illuminate\Support\Str::limit($b->judul, 20, '...') }}</td>
+                            <td class="px-4 py-3 text-sm border-r">
+                                {{ \Illuminate\Support\Str::limit($b->judul, 20, '...') }}</td>
                             <td class="px-4 py-3 text-sm border-r">{{ $b->kategori }}</td>
                             <td class="px-4 py-3 text-sm border-r">{{ $b->user->name ?? '-' }}</td>
                             <td class="px-4 py-3 text-sm border-r">{{ $b->status }}</td>
@@ -47,23 +74,26 @@
                             <td class="flex justify-between px-4 py-3 text-sm text-center">
                                 {{-- <div class="flex justify-between text-sm"> --}}
 
-                                    {{-- Show Detail --}}
-                                    <a href="{{ route('admin.berita.showdetail', $b->id) }}"
-                                        class="text-purple-600 hover:text-purple-800" title="Lihat Detail">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                                {{-- Show Detail --}}
+                                <a href="{{ route('admin.berita.showdetail', $b->id) }}"
+                                    class="text-purple-600 hover:text-purple-800" title="Lihat Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
 
-                                    {{-- Edit --}}
-                                    <a href="{{ route('admin.berita.edit', $b->id) }}" class="text-yellow-400 hover:text-yellow-700" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                {{-- Edit --}}
+                                <a href="{{ route('admin.berita.edit', $b->id) }}"
+                                    class="text-yellow-400 hover:text-yellow-700" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
 
-                                    {{-- Accept (jika belum publish) --}}
-                                    @if ($b->status === 'Unpublish')
-                                    <form action="{{ route('admin.berita.accept', $b->id) }}" method="POST" class="">
+                                {{-- Accept (jika belum publish) --}}
+                                @if ($b->status === 'Unpublish')
+                                    <form action="{{ route('admin.berita.accept', $b->id) }}" method="POST"
+                                        class="">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" title="Terbitkan" class="text-green-600 hover:text-green-800">
+                                        <button type="submit" title="Terbitkan"
+                                            class="text-green-600 hover:text-green-800">
                                             <i class="fas fa-check"></i>
                                         </button>
                                     </form>
@@ -73,13 +103,13 @@
                                     </button>
                                 @endif
 
-                                    {{-- Delete --}}
-                                    <div class="">
-                                        <button onclick="confirmDelete({{ $b->id }}, '{{ $b->judul ?? '-' }}')"
-                                            class="text-red-600 hover:text-red-800">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
+                                {{-- Delete --}}
+                                <div class="">
+                                    <button onclick="confirmDelete({{ $b->id }}, '{{ $b->judul ?? '-' }}')"
+                                        class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                                 {{-- </div> --}}
                             </td>
 

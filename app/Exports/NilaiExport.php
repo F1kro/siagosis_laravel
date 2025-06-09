@@ -1,76 +1,56 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\Nilai;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class NilaiExport implements FromCollection, WithHeadings, WithMapping
+class NilaiExport implements FromQuery, WithHeadings, WithMapping
 {
-    protected $filter;
+    protected $request;
 
-    public function __construct(array $filter)
+    public function __construct(Request $request)
     {
-        $this->filter = $filter;
+        $this->request = $request;
     }
 
-    public function collection()
+    public function query()
     {
-        $query = Nilai::with(['siswa', 'mapel', 'guru']);
+        $query = Nilai::query()->with('siswa.kelas', 'mapel', 'guru');
 
-        if (!empty($this->filter['search'])) {
-            $query->whereHas('siswa', function ($q) {
-                $q->where('nama', 'like', '%' . $this->filter['search'] . '%');
+        if ($this->request->filled('kelas_id') && $this->request->filled('mapel_id') && $this->request->filled('semester') && $this->request->filled('tahun_ajaran')) {
+            $query->whereHas('siswa', function($q) {
+               $q->where('kelas_id', $this->request->kelas_id);
             });
+            $query->where('mapel_id', $this->request->mapel_id)
+                  ->where('semester', $this->request->semester)
+                  ->where('tahun_ajaran', $this->request->tahun_ajaran);
+        } else {
+           $query->whereRaw('1 = 0');
         }
-
-        if (!empty($this->filter['kelas_id'])) {
-            $query->whereHas('siswa', function ($q) {
-                $q->where('kelas_id', $this->filter['kelas_id']);
-            });
-        }
-
-        if (!empty($this->filter['mapel_id'])) {
-            $query->where('mapel_id', $this->filter['mapel_id']);
-        }
-
-        if (!empty($this->filter['guru_id'])) {
-            $query->where('guru_id', $this->filter['guru_id']);
-        }
-
-        if (!empty($this->filter['semester'])) {
-            $query->where('semester', $this->filter['semester']);
-        }
-
-        return $query->get();
+       return $query;
     }
 
     public function headings(): array
     {
-        return [
-            'Nama Siswa',
-            'Kelas',
-            'Mata Pelajaran',
-            'Guru',
-            'Jenis Nilai',
-            'Nilai',
-            'Semester',
-            'Tahun Ajaran',
-        ];
+        return ['NISN', 'Nama Siswa', 'Kelas', 'Mata Pelajaran', 'Jenis Nilai', 'Nilai', 'Semester', 'Tahun Ajaran', 'Guru Pengampu'];
     }
 
     public function map($nilai): array
     {
         return [
-            $nilai->siswa->nama ?? '',
-            $nilai->siswa->kelas->nama ?? '',
-            $nilai->mapel->nama ?? '',
-            $nilai->guru->nama ?? ($nilai->guru->user->name ?? ''),
+            $nilai->siswa->nisn ?? 'N/A',
+            $nilai->siswa->nama ?? 'N/A',
+            $nilai->siswa->kelas->nama_kelas ?? 'N/A',
+            $nilai->mapel->nama ?? 'N/A',
             $nilai->jenis_nilai,
             $nilai->nilai,
             $nilai->semester,
             $nilai->tahun_ajaran,
+            $nilai->guru->nama ?? 'N/A',
         ];
     }
 }

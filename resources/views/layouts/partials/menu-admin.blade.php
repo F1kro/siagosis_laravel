@@ -24,35 +24,43 @@
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/siswa*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.siswa.index') }}"><i
-                            class="mr-2 fas fa-user-graduate"></i>Data Siswa</a></li>
+                            class="mr-2 fas fa-user-graduate"></i>Data Siswa</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/guru*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.guru.index') }}"><i
-                            class="mr-2 fas fa-chalkboard-teacher"></i>Data Guru</a></li>
+                            class="mr-2 fas fa-chalkboard-teacher"></i>Data Guru</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/ortu*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.ortu.index') }}"><i
-                            class="mr-2 fas fa-user-friends"></i>Data Orang Tua</a></li>
+                            class="mr-2 fas fa-user-friends"></i>Data Orang Tua</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/jadwal*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.jadwal.index') }}"><i
-                            class="mr-2 fas fa-calendar-alt"></i>Data Jadwal</a></li>
+                            class="mr-2 fas fa-calendar-alt"></i>Data Jadwal</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/users*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.users.index') }}"><i
-                            class="mr-2 fas fa-user-shield"></i>Data User</a></li>
+                            class="mr-2 fas fa-user-shield"></i>Data User</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/kelas*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.kelas.index') }}"><i class="mr-2 fas fa-door-open"></i>Data
-                        Kelas</a></li>
+                        Kelas</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/mapel*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.mapel.index') }}"><i class="mr-2 fas fa-book"></i>Data
-                        Mapel</a></li>
+                        Mapel</a>
+                </li>
                 <li
                     class="px-2 py-1 transition-colors duration-150 rounded-md hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/guru-mapel*') ? 'bg-purple-100 dark:bg-purple-800 text-gray-800 dark:text-gray-100' : '' }}">
                     <a class="w-full" href="{{ route('admin.guru-mapel.index') }}"><i class="mr-2 fas fa-link"></i>Data
-                        Guru Mapel</a></li>
+                        Guru Mapel</a>
+                </li>
             </ul>
         </template>
     </li>
@@ -69,11 +77,12 @@
     <li class="relative px-6 py-3"><span
             class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/laporan*') ? 'bg-purple-600' : '' }}"></span><a
             class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/laporan*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
-            href="#"><i class="w-5 h-5 fas fa-file-alt"></i><span class="ml-4">Master Laporan</span></a></li>
+            href="{{ route('admin.laporan.index') }}"><i class="w-5 h-5 fas fa-file-alt"></i><span class="ml-4">Master Laporan</span></a></li>
     <li class="relative px-6 py-3"><span
             class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/ranking*') ? 'bg-purple-600' : '' }}"></span><a
             class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/ranking*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
-            href="{{ route('admin.ranking.index') }}"><i class="w-5 h-5 fas fa-ranking-star"></i><span class="ml-4">Master Ranking</span></a></li>
+            href="{{ route('admin.ranking.index') }}"><i class="w-5 h-5 fas fa-ranking-star"></i><span
+                class="ml-4">Master Ranking</span></a></li>
     <li class="relative px-6 py-3"><span
             class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg {{ request()->is('admin/berita*') ? 'bg-purple-600' : '' }}"></span><a
             class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 {{ request()->is('admin/berita*') ? 'text-gray-800 dark:text-gray-100' : '' }}"
