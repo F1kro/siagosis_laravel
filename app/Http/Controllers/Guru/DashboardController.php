@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
@@ -35,10 +36,10 @@ class DashboardController extends Controller
             $hariIniStr = Carbon::now()->locale('id_ID')->isoFormat('dddd');
 
             $jadwalHariIni = $guru->jadwal()
-                                  ->where('hari', $hariIniStr)
-                                  ->with(['mapel', 'kelas'])
-                                  ->orderBy('jam_mulai')
-                                  ->get();
+                ->where('hari', $hariIniStr)
+                ->with(['mapel', 'kelas'])
+                ->orderBy('jam_mulai')
+                ->get();
         }
 
         $recentBerita = Berita::where('status', 'Published')

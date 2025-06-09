@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\LaporanController as LaporanController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Guru\AbsensiController as GuruAbsensiController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
+use App\Http\Controllers\Guru\HubungiOrtuController as GuruHubungiOrtuController;
 use App\Http\Controllers\Guru\NilaiController as GuruNilaiController;
 use App\Http\Controllers\Orangtua\BeritaController as OrangtuaBeritaController;
 use App\Http\Controllers\Orangtua\DashboardController as OrangtuaDashboardController;
@@ -38,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureUserHasRole;
 
 Route::get('/', function () {
-    return view('landing_page');
+    return view('welcome');
 });
 
 // Admin Routes
@@ -219,9 +220,10 @@ Route::middleware(['auth', EnsureUserHasRole::class . ':guru'])->prefix('guru')-
     Route::get('absensi/inputAbsensi', [GuruAbsensiController::class, 'inputAbsensi'])->name('absensi.inputAbsensi');
 
     // ranking
-
     Route::get('/ranking', [GuruRankingController::class, 'index'])->name('ranking.index');
 
+    // hubungi-ortu
+    Route::get('/hubungi-ortu', [GuruHubungiOrtuController::class, 'index'])->name('hubungi.ortu');
 });
 
 // Siswa Routes
