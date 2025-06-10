@@ -4,12 +4,15 @@
 
 <div class="container grid px-6 mx-auto">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        {{ isset($orangtua) ? 'Edit' : 'Tambah' }}  Orangtua
+        {{ isset($orangtua) ? 'Edit' : 'Tambah' }} Orangtua
     </h2>
 
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <form action="{{ route('admin.ortu.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ isset($orangtua) ? route('admin.ortu.update', $orangtua->id) : route('admin.ortu.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @if(isset($orangtua))
+                @method('PUT')
+            @endif
 
             <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Nama</span>
@@ -25,7 +28,6 @@
                 @enderror
             </label>
 
-            <!-- Nama -->
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Telp</span>
                 <input
@@ -60,8 +62,10 @@
                     name="siswa_id"
                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                 >
+                    <option value="">-- Pilih Siswa --</option>
                     @foreach($siswa as $siswaItem)
-                        <option value="{{ $siswaItem->id }}" {{ old('siswa_id') == $siswaItem->id ? 'selected' : '' }}>
+                        <option value="{{ $siswaItem->id }}"
+                            {{ old('siswa_id', $data->siswa_id ?? '') == $siswaItem->id ? 'selected' : '' }}>
                             {{ $siswaItem->nama }}
                         </option>
                     @endforeach
@@ -71,7 +75,6 @@
                 @enderror
             </label>
 
-            <!-- Alamat -->
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Alamat</span>
                 <textarea
@@ -85,7 +88,6 @@
                 @enderror
             </label>
 
-            <!-- Submit Button -->
             <div class="flex justify-end mt-6">
                 <button
                     type="submit"

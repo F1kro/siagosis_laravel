@@ -7,7 +7,7 @@
         Peringkat Akademik: {{ $siswa->nama }}
     </h2>
 
-    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div class="grid w-full gap-6 md:grid-cols-2 xl:grid-cols-3">
         @forelse ($riwayatRanking as $ranking)
             <div class="flex flex-col p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <div class="mb-4">
@@ -48,11 +48,11 @@
                 </div>
             </div>
         @empty
-            <div class="w-full md:col-span-2 xl:col-span-3">
-                <div class="p-6 text-center text-gray-500 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    Data ranking belum tersedia. Silakan cek kembali setelah pembagian raport.
-                </div>
-            </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <p class="text-sm text-center text-gray-600 dark:text-gray-400">
+                Peringkat Ananda belum tersedia saat ini, silahkan cek lagi setelah pembagian raport.
+            </p>
+        </div>
         @endforelse
     </div>
 </div>
