@@ -6,6 +6,33 @@
             <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
                 Daftar Tugas Saya
             </h2>
+
+            @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm bg-green-500 rounded-lg shadow-md dark:bg-green-500 dark:text-white"
+                role="alert">
+                <span class="font-medium">{{ session('success') }}</span>
+            </div>
+            @endif
+            @if (session('error'))
+                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                    class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
+                    role="alert">
+                    <span class="font-medium">{{ session('error') }}</span>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <p class="font-medium">Harap perbaiki kesalahan di bawah ini:</p>
+                    <ul class="mt-1.5 ml-4 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <a href="{{ route('siswa.todolist.create') }}"
                 class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 Tambah Tugas Baru

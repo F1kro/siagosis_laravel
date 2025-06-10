@@ -8,6 +8,32 @@
             Selamat Datang🎓, {{ Auth::user()->name ?? 'Guru' }}
         </h2>
 
+        @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm bg-green-500 rounded-lg shadow-md dark:bg-green-500 dark:text-white"
+                role="alert">
+                <span class="font-medium">{{ session('success') }}</span>
+            </div>
+        @endif
+        @if (session('error'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
+                role="alert">
+                <span class="font-medium">{{ session('error') }}</span>
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert">
+                <p class="font-medium">Harap perbaiki kesalahan di bawah ini:</p>
+                <ul class="mt-1.5 ml-4 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900">
             <p class="text-sm text-gray-600 dark:text-gray-400">
                 <a href="{{ route('guru.dashboard') }}" class="hover:underline">Dashboard</a>
