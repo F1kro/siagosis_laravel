@@ -13,9 +13,6 @@
                     Dashboard > Data guru
                 </p>
             </div>
-
-            <!-- ini flash data  -->
-
              <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
                 <form action="{{ route('admin.guru.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
                    <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
@@ -29,125 +26,100 @@
                        />
                    </div>
 
-                     @if (session('success'))
-            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
-                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-400 dark:text-green-200"
-                role="alert">
-                <span class="font-medium">{{ session('success') }}</span>
+                <!-- Submit Button (hidden if using onchange for select) -->
+                <button type="submit" class="hidden">Cari</button>
+            </form>
+            <div class="ml-2 sm:ml-0">
+                <a href="{{ route('admin.guru.create') }}"
+                    class="w-full px-4 py-3 text-sm text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
+                    Tambah guru
+                </a>
             </div>
-            @endif
-            @if (session('error'))
-                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
-                    class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
-                    role="alert">
-                    <span class="font-medium">{{ session('error') }}</span>
-                </div>
-            @endif
-            @if ($errors->any())
-                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                    role="alert">
-                    <p class="font-medium">Harap perbaiki kesalahan di bawah ini:</p>
-                    <ul class="mt-1.5 ml-4 list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-                   <!-- Submit Button (hidden if using onchange for select) -->
-                   <button type="submit" class="hidden">Cari</button>
-               </form>
-                <div class="ml-2 sm:ml-0">
-                    <a href="{{ route('admin.guru.create') }}" class="w-full px-4 py-3 text-sm text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
-                        Tambah guru
-                    </a>
-                </div>
-            </div>
-            <div class="w-full overflow-x-auto rounded-lg">
-                <table class="w-full whitespace-no-wrap">
-                    <thead>
-                        <tr
-                            class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">No.</th>
-                            <th class="px-4 py-3">Nama</th>
-                            <th class="px-4 py-3">NIP</th>
-                            <th class="px-4 py-3">Telp</th>
-                            <th class="px-4 py-3">Jenis Kelamin</th>
-                            <th class="px-4 py-3">Foto</th>
-                            <th class="px-4 py-3">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        @forelse($guru as $index => $s)
-                            <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $guru->firstItem() + $index }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru->nama ?? '-'}}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru->nip ?? '-' }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru->telepon ?? '-'}}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ $s->guru ? ($s->guru->jenis_kelamin == 'Laki-laki' ? 'Laki-laki' : 'Perempuan') : '-' }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    @if ($s->guru && $s->guru->foto)
-                                        <img src="{{ asset('storage/' . $s->guru->foto ?? '-') }}" alt="{{ $s->nama ?? '-' }}"
-                                            class="object-cover w-8 h-8 rounded-md">
-                                    @else
-                                        <div
-                                            class="flex items-center justify-center w-8 h-8 text-gray-800 bg-gray-800 rounded-md dark:text-gray-200 dark:bg-gray-200">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center space-x-4 text-sm">
-                                        <a href="{{ route('admin.guru.edit', $s->id) }}"
-                                            class="text-yellow-500 hover:text-yellow-700">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button onclick="confirmDelete({{ $s->id }}, '{{ $s->guru->nama ?? '-'}}')"
-                                            class="text-red-600 hover:text-red-800">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-
+        </div>
+        <div class="w-full overflow-x-auto rounded-lg">
+            <table class="w-full whitespace-no-wrap">
+                <thead>
+                    <tr
+                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3">No.</th>
+                        <th class="px-4 py-3">Nama</th>
+                        <th class="px-4 py-3">NIP</th>
+                        <th class="px-4 py-3">Telp</th>
+                        <th class="px-4 py-3">Jenis Kelamin</th>
+                        <th class="px-4 py-3">Foto</th>
+                        <th class="px-4 py-3">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    @forelse($guru as $index => $s)
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm">
+                                {{ $guru->firstItem() + $index }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $s->guru->nama ?? '-' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $s->guru->nip ?? '-' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $s->guru->telepon ?? '-' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $s->guru ? ($s->guru->jenis_kelamin == 'Laki-laki' ? 'Laki-laki' : 'Perempuan') : '-' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                @if ($s->guru && $s->guru->foto)
+                                    <img src="{{ asset('storage/' . $s->guru->foto ?? '-') }}" alt="{{ $s->nama ?? '-' }}"
+                                        class="object-cover w-8 h-8 rounded-md">
+                                @else
+                                    <div
+                                        class="flex items-center justify-center w-8 h-8 text-gray-800 bg-gray-800 rounded-md dark:text-gray-200 dark:bg-gray-200">
+                                        <i class="fas fa-user"></i>
                                     </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="px-6 py-6 text-center text-gray-500">
-                                    <i class="mb-2 text-3xl fas fa-user-slash"></i>
-                                    <p class="mb-2">Tidak ada data guru</p>
-                                    <a href="{{ route('admin.guru.create') }}"
-                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
-                                        <i class="mr-2 fas fa-plus"></i> Tambah guru
+                                @endif
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center space-x-4 text-sm">
+                                    <a href="{{ route('admin.guru.edit', $s->id) }}"
+                                        class="text-yellow-500 hover:text-yellow-700">
+                                        <i class="fas fa-edit"></i>
                                     </a>
-                                </td>
-                            </tr>
-                        @endforelse()
-                    </tbody>
-                </table>
-            </div>
-            <div class="flex flex-col items-center justify-between py-4 md:flex-row">
-                {{-- Pagination links --}}
-                <div>
-                    {{ $guru->links('pagination::tailwind') }}
-                </div>
+                                    <button onclick="confirmDelete({{ $s->id }}, '{{ $s->guru->nama ?? '-' }}')"
+                                        class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
 
-                {{-- Page info --}}
-                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 md:mt-0">
-                    Halaman {{ $guru->currentPage() }} dari {{ $guru->lastPage() }} |
-                    Menampilkan {{ $guru->firstItem() }} - {{ $guru->lastItem() }} dari total {{ $guru->total() }} data
-                </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-6 text-center text-gray-500">
+                                <i class="mb-2 text-3xl fas fa-user-slash"></i>
+                                <p class="mb-2">Tidak ada data guru</p>
+                                <a href="{{ route('admin.guru.create') }}"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                                    <i class="mr-2 fas fa-plus"></i> Tambah guru
+                                </a>
+                            </td>
+                        </tr>
+                    @endforelse()
+                </tbody>
+            </table>
+        </div>
+        <div class="flex flex-col items-center justify-between py-4 md:flex-row">
+            {{-- Pagination links --}}
+            <div>
+                {{ $guru->links('pagination::tailwind') }}
             </div>
+
+            {{-- Page info --}}
+            <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 md:mt-0">
+                Halaman {{ $guru->currentPage() }} dari {{ $guru->lastPage() }} |
+                Menampilkan {{ $guru->firstItem() }} - {{ $guru->lastItem() }} dari total {{ $guru->total() }} data
+            </div>
+        </div>
     </div>
 
     {{-- Modal Hapus guru --}}

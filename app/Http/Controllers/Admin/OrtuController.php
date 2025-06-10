@@ -34,6 +34,7 @@ class OrtuController extends Controller
 
     public function create()
     {
+        // ambil data siswa dengan id_siswa yang belum terkait debngan id _ortu samsek
         $siswa = Siswa::whereDoesntHave('orangtua')->get();
         return view('admin.ortu.create', compact('siswa'));
     }
@@ -45,7 +46,7 @@ class OrtuController extends Controller
             'pekerjaan' => 'required|string|max:225',
             'telepon' => 'required|string|max:15|unique:orangtua,telepon',
             'alamat' => 'required|string|max:225',
-            'siswa_id' => 'required|exists:siswa,id|unique:orangtua,siswa_id', // Tambahkan validasi unique untuk siswa_id
+            'siswa_id' => 'required|exists:siswa,id|unique:orangtua,siswa_id',  // tambahan validasi unique untuk siswa_id untuk nambahi validasi / kevalidan data 
         ]);
 
         $user = User::create([
@@ -71,7 +72,7 @@ class OrtuController extends Controller
         $orangtua = User::with('orangtua')->findOrFail($id);
         $currentSiswaId = $orangtua->orangtua->siswa_id;
 
-        // Ambil siswa yang belum punya relasi OR siswa yang id-nya adalah id siswa saat ini
+        // Ambil siswa yang belum punya relasi OR siswa yang id-nya adalah id siswa saat ini yang dibawa ke _form nya
         $siswa = Siswa::whereDoesntHave('orangtua')
                         ->orWhere('id', $currentSiswaId)
                         ->get();

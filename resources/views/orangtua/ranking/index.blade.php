@@ -8,6 +8,7 @@
     </h2>
 
     <div class="grid w-full gap-6 md:grid-cols-2 xl:grid-cols-3">
+        
         @forelse ($riwayatRanking as $ranking)
             <div class="flex flex-col p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <div class="mb-4">
