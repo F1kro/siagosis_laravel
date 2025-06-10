@@ -13,22 +13,49 @@
                     Dashboard > Data Orang Tua
                 </p>
             </div>
-             <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-                <form action="{{ route('admin.ortu.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-                   <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
-                       <!-- Search Input -->
-                       <input
-                           type="text"
-                           name="search"
-                           placeholder="Cari Orangtua..."
-                           value="{{ request('search') }}"
-                           class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2"
-                       />
-                   </div>
 
-                   <!-- Submit Button (hidden if using onchange for select) -->
-                   <button type="submit" class="hidden">Cari</button>
-               </form>
+            @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-400 dark:text-green-200"
+                role="alert">
+                <span class="font-medium">{{ session('success') }}</span>
+            </div>
+            @endif
+            @if (session('error'))
+                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                    class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
+                    role="alert">
+                    <span class="font-medium">{{ session('error') }}</span>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <p class="font-medium">Harap perbaiki kesalahan di bawah ini:</p>
+                    <ul class="mt-1.5 ml-4 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+            <form action="{{ route('admin.ortu.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+                <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
+                    <!-- Search Input -->
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Cari Orangtua..."
+                        value="{{ request('search') }}"
+                        class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2"
+                    />
+                </div>
+
+                <!-- Submit Button (hidden if using onchange for select) -->
+                <button type="submit" class="hidden">Cari</button>
+            </form>
                 <div class="ml-2 sm:ml-0">
                     <a href="{{ route('admin.ortu.create') }}" class="w-full px-4 py-3 text-sm text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
                         Tambah OrangTua
