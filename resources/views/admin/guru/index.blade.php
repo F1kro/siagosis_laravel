@@ -14,7 +14,22 @@
                 </p>
             </div>
 
-            @if (session('success'))
+            <!-- ini flash data  -->
+
+             <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+                <form action="{{ route('admin.guru.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+                   <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
+                       <!-- Search Input -->
+                       <input
+                           type="text"
+                           name="search"
+                           placeholder="Cari guru..."
+                           value="{{ request('search') }}"
+                           class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2"
+                       />
+                   </div>
+
+                     @if (session('success'))
             <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
                 class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-400 dark:text-green-200"
                 role="alert">
@@ -39,19 +54,6 @@
                     </ul>
                 </div>
             @endif
-
-             <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-                <form action="{{ route('admin.guru.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-                   <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
-                       <!-- Search Input -->
-                       <input
-                           type="text"
-                           name="search"
-                           placeholder="Cari guru..."
-                           value="{{ request('search') }}"
-                           class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2"
-                       />
-                   </div>
 
                    <!-- Submit Button (hidden if using onchange for select) -->
                    <button type="submit" class="hidden">Cari</button>
