@@ -5,22 +5,26 @@
 @section('content')
     <div class="w-full overflow-hidden rounded-lg ">
 
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
-            Selamat Datang🎉, {{ $name }}
-        </h2>
-        <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900 ">
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Dashboard > Data guru
-            </p>
-        </div>
-        <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-            <form action="{{ route('admin.guru.index') }}" method="GET"
-                class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-                <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
-                    <!-- Search Input -->
-                    <input type="text" name="search" placeholder="Cari guru..." value="{{ request('search') }}"
-                        class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2" />
-                </div>
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
+                Selamat Datang🎉, {{ $name }}
+            </h2>
+            <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900 ">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Dashboard > Data guru
+                </p>
+            </div>
+             <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+                <form action="{{ route('admin.guru.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+                   <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
+                       <!-- Search Input -->
+                       <input
+                           type="text"
+                           name="search"
+                           placeholder="Cari guru..."
+                           value="{{ request('search') }}"
+                           class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2"
+                       />
+                   </div>
 
                 <!-- Submit Button (hidden if using onchange for select) -->
                 <button type="submit" class="hidden">Cari</button>
