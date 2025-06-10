@@ -5,16 +5,43 @@
  @section('content')
      <div class="w-full overflow-hidden rounded-lg ">
 
-             <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
-                 Selamat Datang🎉, {{ $name }}
-             </h2>
-             <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900 ">
-                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                     Dashboard > Data Siswa
-                 </p>
-             </div>
-              <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-                 <form action="{{ route('admin.siswa.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 capitalize dark:text-gray-200">
+                Selamat Datang🎉, {{ $name }}
+            </h2>
+            <div class="flex px-4 py-3 mb-6 rounded-lg bg-dark-200 dark:bg-gray-900 ">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Dashboard > Data Siswa
+                </p>
+            </div>
+
+            @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-400 dark:text-green-200"
+                role="alert">
+                <span class="font-medium">{{ session('success') }}</span>
+            </div>
+            @endif
+            @if (session('error'))
+                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                    class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
+                    role="alert">
+                    <span class="font-medium">{{ session('error') }}</span>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <p class="font-medium">Harap perbaiki kesalahan di bawah ini:</p>
+                    <ul class="mt-1.5 ml-4 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
+                <form action="{{ route('admin.siswa.index') }}" method="GET" class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
                     <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
                         <!-- Search Input -->
                         <input
