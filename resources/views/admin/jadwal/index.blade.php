@@ -18,7 +18,7 @@
 
         @if (session('success'))
             <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
-                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-400 dark:text-green-200"
+                class="flex items-center justify-between p-4 mb-4 text-sm bg-green-500 rounded-lg shadow-md dark:bg-green-500 dark:text-white"
                 role="alert">
                 <span class="font-medium">{{ session('success') }}</span>
             </div>
@@ -42,43 +42,39 @@
             </div>
         @endif
 
-        {{-- BARIS FILTER --}}
         <div class="flex flex-col items-start gap-4 mb-4 md:flex-row md:items-center">
-            <form action="{{ route('admin.jadwal.index') }}" method="GET" class="flex flex-wrap items-center w-full gap-2">
-                {{-- Filter Kelas --}}
+            <form action="{{ route('admin.jadwal.index') }}" method="GET"
+                class="flex flex-wrap items-center w-full gap-2">
                 <select name="kelas_id" class="px-3 py-3 text-sm border rounded-md dark:border-none">
                     <option value="">Semua Kelas</option>
-                    @foreach($kelas as $k)
+                    @foreach ($kelas as $k)
                         <option value="{{ $k->id }}" {{ request('kelas_id') == $k->id ? 'selected' : '' }}>
                             {{ $k->nama_kelas }}
                         </option>
                     @endforeach
                 </select>
 
-                {{-- Filter Hari --}}
                 <select name="hari" class="px-3 py-3 text-sm border rounded-md dark:border-none">
                     <option value="">Semua Hari</option>
-                    @foreach($hariList as $key => $value)
+                    @foreach ($hariList as $key => $value)
                         <option value="{{ $key }}" {{ request('hari') == $key ? 'selected' : '' }}>
                             {{ $value }}
                         </option>
                     @endforeach
                 </select>
 
-                {{-- Filter Tahun Ajaran --}}
                 <select name="tahun_ajaran" class="px-3 py-3 text-sm border rounded-md dark:border-none">
                     <option value="">Semua Tahun Ajaran</option>
-                    @foreach($tahunAjaranList as $ta)
+                    @foreach ($tahunAjaranList as $ta)
                         <option value="{{ $ta }}" {{ request('tahun_ajaran') == $ta ? 'selected' : '' }}>
                             {{ $ta }}
                         </option>
                     @endforeach
                 </select>
 
-                {{-- Filter Semester --}}
                 <select name="semester" class="px-3 py-3 text-sm border rounded-md dark:border-none">
                     <option value="">Semua Semester</option>
-                    @foreach($semesterList as $smt)
+                    @foreach ($semesterList as $smt)
                         <option value="{{ $smt }}" {{ request('semester') == $smt ? 'selected' : '' }}>
                             {{ $smt }}
                         </option>
@@ -89,24 +85,25 @@
                     Filter
                 </button>
 
-                @if(request('kelas_id') || request('hari') || request('tahun_ajaran') || request('semester'))
-                    <a href="{{ route('admin.jadwal.index') }}" class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 dark:text-gray-300">Reset</a>
+                @if (request('kelas_id') || request('hari') || request('tahun_ajaran') || request('semester'))
+                    <a href="{{ route('admin.jadwal.index') }}"
+                        class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 dark:text-gray-300">Reset</a>
                 @endif
             </form>
-        </div> {{-- AKHIR DARI BARIS FILTER --}}
+        </div>
 
-        {{-- BARIS TOMBOL AKSI --}}
         <div class="flex justify-start w-full gap-2 mb-4">
             <a href="{{ route('admin.jadwal.create') }}"
                 class="px-4 py-3 text-sm text-white bg-purple-600 rounded-md hover:bg-purple-700">
                 <i class="mr-1 fas fa-plus"></i> Tambah Jadwal
             </a>
-        </div> {{-- AKHIR DARI BARIS TOMBOL AKSI --}}
+        </div>
 
         <div class="w-full overflow-x-auto rounded-lg">
             <table class="w-full whitespace-no-wrap">
                 <thead>
-                    <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                    <tr
+                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">No</th>
                         <th class="px-4 py-3">Kelas</th>
                         <th class="px-4 py-3">Mata Pelajaran</th>
@@ -139,7 +136,8 @@
                                         class="text-yellow-500 hover:text-yellow-700">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button onclick="confirmDelete('{{ $j->id }}', '{{ $j->kelas->nama_kelas ?? '' }} - {{ $j->mapel->nama ?? '' }}')"
+                                    <button
+                                        onclick="confirmDelete('{{ $j->id }}', '{{ $j->kelas->nama_kelas ?? '' }} - {{ $j->mapel->nama ?? '' }}')"
                                         class="text-red-600 hover:text-red-800">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -173,7 +171,6 @@
         </div>
     </div>
 
-    {{-- Modal Hapus --}}
     <script>
         function confirmDelete(id, name) {
             Swal.fire({

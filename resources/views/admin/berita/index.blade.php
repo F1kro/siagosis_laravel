@@ -14,14 +14,14 @@
         </div>
 
         @if (session('success'))
-            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 4000)"
-                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-200 dark:text-gray-200"
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center justify-between p-4 mb-4 text-sm bg-green-500 rounded-lg shadow-md dark:bg-green-500 dark:text-white"
                 role="alert">
                 <span class="font-medium">{{ session('success') }}</span>
             </div>
         @endif
         @if (session('error'))
-            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 4000)"
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
                 class="flex items-center justify-between p-4 mb-4 text-sm text-red-800 rounded-lg shadow-md bg-red-50 dark:bg-red-800 dark:text-red-200"
                 role="alert">
                 <span class="font-medium">{{ session('error') }}</span>

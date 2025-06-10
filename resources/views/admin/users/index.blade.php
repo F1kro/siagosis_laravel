@@ -17,7 +17,7 @@
 
         @if (session('success'))
             <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
-                class="flex items-center justify-between p-4 mb-4 text-sm text-white bg-green-500 rounded-lg shadow-md dark:bg-green-400 dark:text-green-200"
+                class="flex items-center justify-between p-4 mb-4 text-sm bg-green-500 rounded-lg shadow-md dark:bg-green-500 dark:text-white"
                 role="alert">
                 <span class="font-medium">{{ session('success') }}</span>
             </div>
@@ -42,21 +42,18 @@
         @endif
 
         <div class="flex flex-col items-start justify-between gap-4 mb-4 sm:flex-row sm:items-center">
-            <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <form action="{{ route('admin.users.index') }}" method="GET"
+                class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <div class="flex flex-col items-start gap-2 ml-2 sm:flex-row sm:items-center">
-                    <input
-                        type="text"
-                        name="search"
-                        placeholder="Cari User..."
-                        value="{{ request('search') }}"
-                        class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2"
-                    />
+                    <input type="text" name="search" placeholder="Cari User..." value="{{ request('search') }}"
+                        class="w-full px-3 py-3 mr-2 text-sm border rounded-md dark:border-none sm:w-48 sm:mr-2 sm:mb-2" />
                 </div>
                 <button type="submit" class="hidden">Cari</button>
             </form>
 
             <div class="ml-2 sm:ml-0">
-                <a href="{{ route('admin.users.create') }}" class="w-full px-4 py-3 text-sm text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
+                <a href="{{ route('admin.users.create') }}"
+                    class="w-full px-4 py-3 text-sm text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
                     Tambah User
                 </a>
             </div>
@@ -65,7 +62,8 @@
         <div class="w-full overflow-x-auto rounded-lg">
             <table class="w-full whitespace-no-wrap">
                 <thead>
-                    <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                    <tr
+                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">No.</th>
                         <th class="px-4 py-3">Nama</th>
                         <th class="px-4 py-3">Email</th>
@@ -90,10 +88,12 @@
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}"
+                                        class="text-yellow-500 hover:text-yellow-700">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')" class="text-red-600 hover:text-red-800">
+                                    <button onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')"
+                                        class="text-red-600 hover:text-red-800">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -104,7 +104,8 @@
                             <td colspan="5" class="px-6 py-6 text-center text-gray-500">
                                 <i class="mb-2 text-3xl fas fa-user-slash"></i>
                                 <p class="mb-2">Tidak ada data user</p>
-                                <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                                <a href="{{ route('admin.users.create') }}"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
                                     <i class="mr-2 fas fa-plus"></i> Tambah User
                                 </a>
                             </td>
