@@ -24,32 +24,32 @@ Berikut adalah beberapa tampilan dari prototipe SIAGOSIS:
 [cite_start]Aplikasi ini memiliki beberapa fitur inti yang terbagi berdasarkan peran pengguna (Aktor):
 
 ### 👤 Operator / Admin
-- [cite_start]**Manajemen Pengguna:** Membuat, mengubah, dan menghapus akun untuk siswa, guru, dan orang tua.
-- [cite_start]**Manajemen Data Master:** Mengelola data inti seperti data siswa, guru, kelas, dan mata pelajaran.
-- [cite_start]**Dashboard Statistik:** Memantau data agregat seperti total siswa, guru, orang tua/wali, dan rerata nilai dalam bentuk grafik.
+[cite_start]**Manajemen Pengguna:** Membuat, mengubah, dan menghapus akun untuk siswa, guru, dan orang tua.
+[cite_start]**Manajemen Data Master:** Mengelola data inti seperti data siswa, guru, kelas, dan mata pelajaran.
+[cite_start]**Dashboard Statistik:** Memantau data agregat seperti total siswa, guru, orang tua/wali, dan rerata nilai dalam bentuk grafik.
 
 ### 👮 Guru
-- [cite_start]**Manajemen Akademik:** Menginput dan mengelola data presensi dan nilai siswa.
-- [cite_start]**Catatan Perilaku:** Memberikan umpan balik atau catatan terkait perilaku siswa.
-- [cite_start]**Analisis Kinerja:** Menganalisis kinerja kelas dan menghasilkan laporan untuk membantu perencanaan pengajaran.
-- [cite_start]**Komunikasi:** Mengirimkan notifikasi dan berkomunikasi dengan orang tua.
+[cite_start]**Manajemen Akademik:** Menginput dan mengelola data presensi dan nilai siswa.
+[cite_start]**Catatan Perilaku:** Memberikan umpan balik atau catatan terkait perilaku siswa.
+[cite_start]**Analisis Kinerja:** Menganalisis kinerja kelas dan menghasilkan laporan untuk membantu perencanaan pengajaran.
+[cite_start]**Komunikasi:** Mengirimkan notifikasi dan berkomunikasi dengan orang tua.
 
 ### 👨‍👩‍👧‍👦 Orang Tua
-- [cite_start]**Pemantauan Real-time:** Mengakses informasi kehadiran, nilai, ranking, dan catatan perilaku anak secara *real-time*.
-- [cite_start]**Komunikasi Langsung:** Menghubungi guru atau wali kelas secara langsung melalui sistem.
-- [cite_start]**Menerima Notifikasi:** Mendapatkan pemberitahuan penting dari sekolah terkait kegiatan atau perkembangan anak.
+[cite_start]**Pemantauan Real-time:** Mengakses informasi kehadiran, nilai, ranking, dan catatan perilaku anak secara *real-time*.
+[cite_start]**Komunikasi Langsung:** Menghubungi guru atau wali kelas secara langsung melalui sistem.
+[cite_start]**Menerima Notifikasi:** Mendapatkan pemberitahuan penting dari sekolah terkait kegiatan atau perkembangan anak.
 
 ### 🎓 Siswa
-- [cite_start]**Dashboard Pribadi:** Mengakses informasi jadwal pelajaran, nilai, rekap absensi, dan catatan perilaku.
-- [cite_start]**Manajemen Tugas:** Menggunakan fitur To-Do List untuk mencatat tugas dan menerima notifikasi deadline.
-- [cite_start]**Informasi Sekolah:** Melihat berita dan pengumuman penting dari sekolah.
+[cite_start]**Dashboard Pribadi:** Mengakses informasi jadwal pelajaran, nilai, rekap absensi, dan catatan perilaku.
+[cite_start]**Manajemen Tugas:** Menggunakan fitur To-Do List untuk mencatat tugas dan menerima notifikasi deadline.
+[cite_start]**Informasi Sekolah:** Melihat berita dan pengumuman penting dari sekolah.
 
 ## Teknologi yang Digunakan
 [cite_start]Berdasarkan analisis kelayakan, proyek ini dikembangkan sebagai **Sistem Berbasis Web**  [cite_start]dengan pertimbangan biaya yang lebih rendah dan implementasi yang lebih sederhana.
-- [cite_start]**Framework:** [Laravel](https://laravel.com) (Direkomendasikan dalam dokumen) 
-- **Bahasa Pemrograman:** PHP
-- **Database:** MySQL
-- [cite_start]**Arsitektur:** Sistem Tersentralisasi berbasis Cloud 
+[cite_start]**Framework:** [Laravel](https://laravel.com) (Direkomendasikan dalam dokumen) 
+**Bahasa Pemrograman:** PHP
+**Database:** MySQL
+[cite_start]**Arsitektur:** Sistem Tersentralisasi berbasis Cloud 
 
 ## Instalasi & Konfigurasi Lokal
 Ikuti langkah-langkah berikut untuk menjalankan proyek ini di lingkungan pengembangan lokal Anda.
